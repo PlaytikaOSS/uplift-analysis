@@ -17,7 +17,7 @@ uplift_analysis
 cases requiring the analysis of uplift modeling techniques.<br/>
 The implemented modules include scoring utilities, analysis strategy, and relevant visualization methods.
 
-This library works for Python 3.6 and higher.
+This library works for Python 3.7 and higher.
 
 Installation
 ------------
