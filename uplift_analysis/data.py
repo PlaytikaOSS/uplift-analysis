@@ -1,7 +1,7 @@
 from typing import Union, Dict, List, Optional
 from dataclasses import dataclass, field
 import pandas as pd
-import utils
+from . import utils
 
 
 @dataclass
@@ -113,7 +113,7 @@ class EvalSet:
         self.is_multiple_actions = utils.is_multi_action(actions=self.df[self.observed_action_field],
                                                          neutral_indicator=self.control_indicator)
 
-        self.is_binary_response = utils.is_binary_response(response=self.df[self.response_field])
+        self.is_binary_response = utils.is_binary_response(responses=self.df[self.response_field])
 
     def sort_and_rank(self) -> None:
         """
@@ -129,8 +129,6 @@ class EvalSet:
         # this new "index" represents the corresponding percentile of each observation in terms of score
         self.df['normalized_index'] = (self.df.index + 1) / len(self.df)
 
-        return self.df
-
     def infer_subgroup_assignment(self) -> None:
         """
         This method specifies, for each observation in the dataset, what group was the observation assigned to -
@@ -144,6 +142,8 @@ class EvalSet:
         self.df.loc[:, 'is_treated'] = (self.df[self.observed_action_field] != self.control_indicator).astype(int)
         self.df.loc[:, 'is_intersect'] = (
                 self.df[self.observed_action_field] == self.df[self.proposed_action_field]).astype(int)
+        self.df.loc[:, 'is_unrealized'] = (
+                self.df[self.observed_action_field] != self.df[self.proposed_action_field]).astype(int)
 
     def get_cumulative_counts(self) -> None:
         """
@@ -153,6 +153,7 @@ class EvalSet:
         self.df.loc[:, 'control_count'] = self.df['is_control'].cumsum()
         self.df.loc[:, 'treated_count'] = self.df['is_treated'].cumsum()
         self.df.loc[:, 'intersect_count'] = self.df['is_intersect'].cumsum()
+        self.df.loc[:, 'unrealized_count'] = self.df['is_unrealized'].cumsum()
 
         # compute a cumulative fraction of the treated observations along the ranked dataset
         self.df.loc[:, 'frac_of_overall_treated'] = self.df['treated_count'] / self.df['treated_count'].iloc[-1]
@@ -167,21 +168,25 @@ class EvalSet:
         sum_responses_control = (self.df[self.response_field].multiply(self.df['is_control'])).cumsum()
         sum_responses_intersect = (self.df[self.response_field].multiply(self.df['is_intersect'])).cumsum()
         sum_responses_treated = (self.df[self.response_field].multiply(self.df['is_treated'])).cumsum()
+        sum_responses_unrealized = (self.df[self.response_field].multiply(self.df['is_unrealized'])).cumsum()
 
         # using the cumulative sums computed above, and the corresponding cumulative counts computed earlier,
         # average the response in a cumulative manner, for each group
         self.df.loc[:, 'above_response_control'] = sum_responses_control / self.df['control_count']
         self.df.loc[:, 'above_response_intersect'] = sum_responses_intersect / self.df['intersect_count']
         self.df.loc[:, 'above_response_treated'] = sum_responses_treated / self.df['treated_count']
+        self.df.loc[:, 'above_response_unrealized'] = sum_responses_unrealized / self.df['unrealized_count']
 
-        # specifically, for the observations within the control group (neutral action, or no action at all),
         # we also compute the complementary average response.
         # for that we need to know what is the overall sum of responses for that group:
         total_responses_control = sum_responses_control.iloc[-1]
+        total_responses_treated = sum_responses_treated.iloc[-1]
         # and average the response - dividing the residual sum of responses (numerator)
         # by the residual count (denominator)
         self.df.loc[:, 'below_response_control'] = (total_responses_control - sum_responses_control) / (
                 self.df['control_count'].iloc[-1] - self.df['control_count'])
+        self.df.loc[:, 'below_response_treated'] = (total_responses_treated - sum_responses_treated) / (
+                self.df['treated_count'].iloc[-1] - self.df['treated_count'])
 
     def compute_uplift(self) -> None:
         """
@@ -192,6 +197,8 @@ class EvalSet:
         """
         self.df.loc[:, 'uplift_intersection'] = self.df['above_response_intersect'] - self.df['above_response_control']
         self.df.loc[:, 'uplift_treated'] = self.df['above_response_treated'] - self.df['above_response_control']
+        self.df.loc[:, 'uplift_against_unrealized'] = self.df['above_response_intersect'] - self.df[
+            'above_response_unrealized']
 
     def compute_gain(self) -> None:
         """
