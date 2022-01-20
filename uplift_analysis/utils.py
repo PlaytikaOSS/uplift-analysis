@@ -30,7 +30,9 @@ def is_multi_action(actions: pd.Series, neutral_indicator: Union[int, str]) -> b
         A boolean indicating if the set is associated with multiple actions (True).
 
     """
-    return not ((actions.nunique() == 2) and (neutral_indicator in actions.unique().tolist()))
+    unique_actions = actions.unique().tolist()
+    assert neutral_indicator in unique_actions
+    return not ((len(unique_actions) == 2) and (neutral_indicator in unique_actions))
 
 
 def is_binary_response(responses: pd.Series) -> bool:

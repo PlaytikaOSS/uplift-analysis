@@ -612,7 +612,8 @@ class Evaluator:
                 name, eval_set = '', eval_res
 
             # compute area under the curve and label accordingly
-            auuc = self.integrate(x=eval_set.df['uplift_intersection'], dx=eval_set.get_quantile_interval())
+            dx = eval_set.get_quantile_interval()
+            auuc = self.integrate(x=eval_set.df['uplift_intersection'], dx=dx)
             lines[0].set_label(f"Intersection Uplift (AUUC={auuc:.3f})")
             # color fill for the area under the curve
             u = visualization.chop_lower_quantiles(eval_set.df.set_index('normalized_index')['uplift_intersection'],
@@ -785,7 +786,8 @@ class Evaluator:
             # compute area under the curve and label accordingly
             u: pd.Series = frac_lift(eval_set.df)
             u.index = eval_set.df['normalized_index']
-            auuc = self.integrate(x=u, dx=eval_set.get_quantile_interval())
+            dx = eval_set.get_quantile_interval()
+            auuc = self.integrate(x=u, dx=dx)
             lines[0].set_label(f"Fractional Uplift (AUUC={auuc:.3f})")
             # color fill for the area under the curve
             u = visualization.chop_lower_quantiles(u, q=self.min_quantile)

@@ -195,7 +195,8 @@ class Scorer:
         # count votes for each action across all methods
         df = pd.DataFrame(scored_actions)
         obligatory_columns = np.arange(0, action_dim).tolist()
-        votes = pd.get_dummies(df.stack()).reindex(columns=obligatory_columns, fill_value=0).sum(level=0).values
+        votes = pd.get_dummies(df.stack()).reindex(columns=obligatory_columns, fill_value=0).groupby(
+            level=0).sum().values
 
         # multiply votes quantity by weights
         weighted_scores = np.multiply(weights_matrix, votes)
