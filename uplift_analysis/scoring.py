@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-This module implements a scoring utility wrapped as a class named Scorer.
+This module implements a scoring utility wrapped as a class named ``Scorer``.
 Given a set of (or a single) scoring configurations, each of which specifies the relevant fields, and the specific
 function to apply to these fields, each observation within the input dataset is scored.
 In case of multiple scoring configurations, the scores of the methods are combined into a new score, weighting the
 magnitude of the score, associated with each action (relevant for a multiple actions scenario).
 
 Notes:
-    - Scorer also supports use-cases with multiple treatments.
+    - ``Scorer`` also supports use-cases with multiple treatments.
 
 """
-from typing import Dict, List, Union, Tuple
+from typing import Dict, List, Union, Tuple, Optional
 import scipy
 import numpy as np
 import pandas as pd
@@ -21,20 +21,32 @@ class Scorer:
     The Scorer class is used for scoring observations on a given dataset, according to a provided configuration,
     or a set of configurations.
 
+    Parameters
+    ----------
+    scoring_configuration: Optional[Union[Dict, List[Dict]]]
+        A list of configurations or a single configuration (each of which represented as dict) specifying scoring
+        methods.
+
     """
     scoring_configuration: Union[Dict, List[Dict]]
 
-    def __init__(self, scoring_configuration: Union[Dict, List[Dict]] = None):
+    def __init__(self, scoring_configuration: Optional[Union[Dict, List[Dict]]] = None):
         """
         See class docstring for further details regarding class functionality.
-
-        Args:
-            scoring_configuration: a list of configurations or a single configuration (each of which represented as
-                dict) specifying scoring methods.
         """
         self.set_scoring_config(scoring_configuration)
 
-    def set_scoring_config(self, scoring_configuration: List[Dict]) -> None:
+    def set_scoring_config(self, scoring_configuration: Union[Dict, List[Dict]]) -> None:
+        """
+        A method for setting the scoring configuration associated with the object.
+
+        Parameters
+        ----------
+        scoring_configuration: Union[Dict, List[Dict]]
+            A list of configurations or a single configuration (each of which represented as dict) specifying scoring
+            methods.
+
+        """
         if scoring_configuration is not None:
             self.scoring_configuration = scoring_configuration
 
@@ -45,19 +57,23 @@ class Scorer:
         this function returns the corresponding scores for each observation in the set, accompanied with the
         recommended action.
 
-        Args:
-            dataset: the dataset to be scored.
-            scoring_configuration: the configuration according to which the observations will be scored.
+        Parameters
+        ----------
+        dataset: Union[Dict[str, np.ndarray], pd.DataFrame]
+            the dataset to be scored.
+        scoring_configuration: Union[Dict, List[Dict]]
+            the configuration according to which the observations will be scored.
 
-        Returns:
-            (tuple): tuple containing:
-
-                rankings (np.ndarray): the relative rank (0,1] - highest means highest uplift score -
-                    of each observation in the dataset.
-                scored_actions (np.ndarray): the serial index of the action corresponding
-                    to the highest score, per observation.
-                scores (np.ndarray): the score for each observation, according to the provided configuration.
-                action_dim (int): the quantity of actions taken into account.
+        Returns
+        -------
+        rankings: np.ndarray
+            The relative rank (0,1] - highest means highest uplift score - of each observation in the dataset.
+        scored_actions: np.ndarray
+            The serial index of the action corresponding to the highest score, per observation.
+        scores: np.ndarray
+            The score for each observation, according to the provided configuration.
+        action_dim: int
+            The quantity of actions taken into account.
         """
 
         # if no configuration was provided, make sure the object was already configured beforehand.
@@ -71,25 +87,29 @@ class Scorer:
         else:  # in case the configuration lists a set of configuration methods
             return self.multiple_scoring_methods_calc(dataset=dataset, scoring_methods=scoring_configuration)
 
-    def multiple_scoring_methods_calc(self, dataset: Union[Dict[str, np.ndarray]], scoring_methods: List[Dict]):
+    def multiple_scoring_methods_calc(self, dataset: Union[Dict[str, np.ndarray], pd.DataFrame],
+                                      scoring_methods: List[Dict]):
         """
         This function applies a set of scoring method configurations to the provided dataset,
         and returns the resulting scores, and the recommended actions after combining the set of computed scores.
 
-        Args:
-            dataset: the set of observations to score.
-            scoring_methods: a list of dictionaries representing the scoring method configurations
+        Parameters
+        ----------
+        dataset: Union[Dict[str, np.ndarray], pd.DataFrame]
+            The set of observations to score.
+        scoring_methods: List[Dict]
+            A list of dictionaries representing the scoring method configurations.
 
-        Returns:
-            (tuple): tuple containing:
-
-                rankings (np.ndarray): the relative rank (0,1] - highest means highest uplift score -
-                    of each observation in the dataset.
-                scored_action (np.ndarray): the serial index of the action corresponding
-                    to the highest score, per observation.
-                observation_score (np.ndarray): the score for each observation, according to the provided configuration.
-                action_dim (int): the quantity of actions taken into account.
-
+        Returns
+        -------
+        rankings: np.ndarray
+            The relative rank (0,1] - highest means highest uplift score - of each observation in the dataset.
+        scored_actions: np.ndarray
+            The serial index of the action corresponding to the highest score, per observation.
+        scores: np.ndarray
+            The score for each observation, according to the provided configuration.
+        action_dim: int
+            The quantity of actions taken into account.
         """
 
         rankings: Union[List, np.ndarray] = []  # populate with rankings of each single scoring method.
@@ -128,22 +148,27 @@ class Scorer:
         A function for combining the recommendations and scores resulting of multiple scoring methods, according
         to the relative rankings.
 
-        Args:
-            rankings: an array containing the relative ranking for each observation (row),
-                and each scoring method (column).
-            scored_actions: an array containing the recommended action for each observation (row),
-                and each scoring method (column).
-            action_dim: the cardinality of the action space.
+        Parameters
+        ----------
+        rankings: np.ndarray
+            An array containing the relative ranking for each observation (row), according to each scoring
+            method (column).
+        scored_actions: np.ndarray
+            An array containing the recommended action for each observation (row), according to each scoring
+            method (column).
+        action_dim: int
+            The cardinality of the action space.
 
-        Returns:
-            (tuple): tuple containing:
-
-                combined_rankings (np.ndarray): the relative rank (0,1] - highest means highest uplift score -
-                    of each observation in the dataset.
-                combined_score_action (np.ndarray): the serial index of the action corresponding
-                    to the highest score, per observation.
-                combined_score (np.ndarray): the score for each observation, according to the provided configuration.
-                action_dim (int): the quantity of actions taken into account.
+        Returns
+        -------
+        combined_rankings: np.ndarray
+            The relative rank (0,1] - highest means highest uplift score - of each observation in the dataset.
+        combined_score_action: np.ndarray
+            The serial index of the action corresponding to the highest score, per observation.
+        combined_score: np.ndarray
+            The score for each observation, according to the provided configuration.
+        action_dim: int
+            The quantity of actions taken into account.
 
         """
         num_obs, num_methods = rankings.shape
@@ -164,7 +189,8 @@ class Scorer:
             corresponding_rank = rankings[:, method_idx]
             # accumulate the rank associated with the recommended actions with the weights matrix
             weights_matrix[slicing_aux, method_scored_actions] = weights_matrix[
-                                                                     slicing_aux, method_scored_actions] + corresponding_rank
+                                                                     slicing_aux, method_scored_actions] + \
+                                                                 corresponding_rank
 
         # count votes for each action across all methods
         df = pd.DataFrame(scored_actions)
@@ -186,20 +212,23 @@ class Scorer:
         This function applies a single scoring method configuration to the provided dataset,
         and returns the resulting scores, and the recommended actions according to these scores.
 
-        Args:
-            dataset: the set of observations to score.
-            scoring_method: a dictionary representing the scoring method configuration
+        Parameters
+        ----------
+        dataset: Union[Dict[str, np.ndarray], pd.DataFrame]
+            The set of observations to score.
+        scoring_method: Dict
+            A dictionary representing the scoring method configuration.
 
-        Returns:
-            (tuple): tuple containing:
-
-                rankings (np.ndarray): the relative rank (0,1] - highest means highest uplift score -
-                    of each observation in the dataset.
-                scored_action (np.ndarray): the serial index of the action corresponding
-                    to the highest score, per observation.
-                observation_score (np.ndarray): the score for each observation, according to the provided configuration.
-                action_dim (int): the quantity of actions taken into account.
-
+        Returns
+        -------
+        rankings: np.ndarray
+            The relative rank (0,1] - highest means highest uplift score - of each observation in the dataset.
+        scored_action: np.ndarray
+            The serial index of the action corresponding to the highest score, per observation.
+        observation_score: np.ndarray
+            The score for each observation, according to the provided configuration.
+        action_dim: int
+            The quantity of actions taken into account.
         """
         # apply the scoring method configuration
         scores = self.score_computation(dataset=dataset, scoring_method=scoring_method)
@@ -229,12 +258,17 @@ class Scorer:
         This function uses a single scoring method configuration and applies it to the provided dataset,
         for score computation.
 
-        Args:
-            dataset: the dataset containing the observations that require scoring.
-            scoring_method: a dictionary specifying the scoring method configuration.
+        Parameters
+        ----------
+        dataset: Union[Dict[str, np.ndarray], pd.DataFrame]
+            The dataset containing the observations that require scoring.
+        scoring_method: Dict
+            A dictionary specifying the scoring method configuration.
 
-        Returns:
-            (np.ndarray): the resulting scores, corresponding the provided scoring method configuration.
+        Returns
+        -------
+        np.ndarray
+            The resulting scores, corresponding the provided scoring method configuration.
         """
 
         # which field represents the signal according to which the score will be computed
@@ -282,15 +316,19 @@ class Scorer:
     @staticmethod
     def rank_scores(observation_score: np.ndarray) -> np.ndarray:
         """
-        A function for computing relative rank (among the provided dataset) for each observation, according
-        to computed score.
+        A method for computing relative rank (among the provided dataset) for each observation, according
+        to the computed score.
 
-        Args:
-            observation_score: array representing score for each observation
+        Parameters
+        ----------
+        observation_score: np.ndarray
+            An array representing the score for each observation.
 
-        Returns:
-            (np.ndarray): relative value in the range (0,1] indicating score rank (within the given dataset),
-                for each of the observations.
+        Returns
+        -------
+        np.ndarray
+            relative value in the range (0,1] indicating score rank (within the given dataset),
+            for each of the observations.
 
         """
 

@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+"""
+This module implements the primary ``dataclass`` required for performing uplift analysis - ``EvalSet``.
+"""
+
 from typing import Union, Dict, List, Optional
 from dataclasses import dataclass, field
 import pandas as pd
@@ -31,7 +36,8 @@ class EvalSet:
         The name associated with the field / column containing the actual action assigned
         for each observation in the evaluated set.
     response_field: Optional[str]
-        The name associated with the field / column containing the observed response for each observation in the evaluated set.
+        The name associated with the field / column containing the observed response for each observation in the 
+        evaluated set.
     score_field: Optional[str]
         The name associated with the field / column containing the output score for each observation in the
         evaluated set.
@@ -81,6 +87,9 @@ class EvalSet:
 
     @property
     def is_evaluated(self) -> bool:
+        """
+        This property will be assigned by ``evaluation.Evaluator`` when the evaluation procedure is completed.
+        """
         return self._is_evaluated
 
     @is_evaluated.setter
@@ -89,6 +98,9 @@ class EvalSet:
 
     @property
     def is_binary_response(self) -> bool:
+        """
+        This property will indicate whether the dataset is associated with a binary response.
+        """
         return self._is_binary_response
 
     @is_binary_response.setter
@@ -97,6 +109,9 @@ class EvalSet:
 
     @property
     def is_multiple_actions(self) -> bool:
+        """
+        This property will indicate whether the dataset is associated with multiple actions.
+        """
         return self._is_multiple_actions
 
     @is_multiple_actions.setter
@@ -106,10 +121,13 @@ class EvalSet:
     def set_problem_type(self):
         """
         This method performs two checks:
-        - is the dataset associated with a single action (except for the neutral action), or with a multitude of
+
+        -   is the dataset associated with a single action (except for the neutral action), or with a multitude of
             possible actions (multiple treatments).
-        - is the dataset associated with a response of binary type.
+        -   is the dataset associated with a response of binary type.
+
         """
+
         self.is_multiple_actions = utils.is_multi_action(actions=self.df[self.observed_action_field],
                                                          neutral_indicator=self.control_indicator)
 
@@ -224,7 +242,7 @@ class EvalSet:
     def compute_relative_lift(self) -> None:
         """
         This method computes the difference between the expected response computed on an earlier stage,
-         and the average response of the control group overall.
+        and the average response of the control group overall.
         """
         # use the average outcome of the control group as the baseline
         base_response_rate = self.df.loc[self.df['is_control'] == 1, self.response_field].mean()
