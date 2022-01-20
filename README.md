@@ -2,7 +2,7 @@
 
 [comment]: <> (Modify also LICENSE.rst if change the README.md)
 
-uplift_analysis
+uplift-analysis
 ================
 
 [comment]: <> (Modify also docs/badges.rst if you change the badges)
@@ -13,7 +13,7 @@ uplift_analysis
 ![alt text](https://img.shields.io/badge/version-0.0.1-blue)
 ![alt text](https://img.shields.io/badge/license-MIT-blue)
 
-**uplift_analysis** is a ``Python`` library that contains implementations of methods and utilities, which can serve use 
+**uplift-analysis** is a ``Python`` library that contains implementations of methods and utilities, which can serve use 
 cases requiring the analysis of uplift modeling techniques.<br/>
 The implemented modules include scoring utilities, analysis strategy, and relevant visualization methods.
 
@@ -25,7 +25,7 @@ This library is distributed on [PyPi](missing_url) and can be installed using ``
 <span style="color:red">Still need to take care of this</span>.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-$ pip install uplift_analysis 
+$ pip install uplift-analysis 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The command above will automatically install all the required dependencies. Please visit the
@@ -57,10 +57,10 @@ and
 Info for developers
 -------------------
 
-The source code of the project is available on [GitHub](https://github.com/PlaytikaResearch/uplift_analysis).
+The source code of the project is available on [GitHub](https://github.com/PlaytikaResearch/uplift-analysis).
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-$ git clone https://github.com/PlaytikaResearch/uplift_analysis.git
+$ git clone https://github.com/PlaytikaResearch/uplift-analysis.git
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can install the library and the dependencies with one of the following commands:
