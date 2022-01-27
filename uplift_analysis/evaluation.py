@@ -158,26 +158,25 @@ class Evaluator:
         # this variable will be used for computing the integral under curves
         dx = eval_set.get_quantile_interval()
 
-        # start with computing summary metrics for the case where the action space is binary (binary treatment)
+        # compute summary aggregated metrics for the case
         summary = {
-            'treated_AUUC': simps(eval_set.df['uplift_treated'].dropna().values, dx=dx),
-            'treated_max_avg_resp': eval_set.df['expected_response_treated'].max(),
-            'max_relative_lift_treated': eval_set.df['relative_lift_treated'].max(),
+            'intersect_AUUC': simps(eval_set.df['uplift_intersection'].dropna().values, dx=dx),
+            'intersect_max_avg_resp': eval_set.df['expected_response_intersect'].max(),
+            'max_relative_lift_intersect': eval_set.df['relative_lift_intersect'].max(),
+            'intersect_max_gain': eval_set.df['gain_intersection'].max()
         }
-        if eval_set.is_binary_response:  # gain is relevant for binary responses
-            summary.update({'treated_max_gain': eval_set.df['gain_treated'].max()})
 
-        # intersection metrics will be informative, and different from the general metrics, only when there is a
-        # multitude of possible actions
+        # When there is a multitude of possible actions, the method will compute aggregate performance
+        # metrics for the case where the action space is considered as binary (binary treatment).
+        # In other cases, these metrics will be identical to the ones computed earlier.
         if eval_set.is_multiple_actions:
-
             summary.update({
-                'intersect_AUUC': simps(eval_set.df['uplift_intersection'].dropna().values, dx=dx),
-                'intersect_max_avg_resp': eval_set.df['expected_response_intersect'].max(),
-                'max_relative_lift_intersect': eval_set.df['relative_lift_intersect'].max(),
+
+                'treated_AUUC': simps(eval_set.df['uplift_treated'].dropna().values, dx=dx),
+                'treated_max_avg_resp': eval_set.df['expected_response_treated'].max(),
+                'max_relative_lift_treated': eval_set.df['relative_lift_treated'].max(),
+                'treated_max_gain': eval_set.df['gain_treated'].max()
             })
-            if eval_set.is_binary_response:  # gain is relevant for binary responses
-                summary.update({'intersect_max_gain': eval_set.df['gain_intersection'].max()})
 
         return summary
 
@@ -1671,12 +1670,13 @@ class Evaluator:
 
         This visualization considers three groups:
 
-        -   The distribution of the observed/actual treatments/actions in the entire dataset (here, the threshold has no
-            affect, as this distribution was observed regardless of the scores associated with each observation).
-        -   The distribution of the recommendations of the model, where scores lower than the threshold are considered
-            as a recommendation for the neutral action.
-        -   The distribution of actions in the intersection set between the observed actions and the ones recommended
-            by the model.
+        -   ``Observed``: The distribution of the observed/actual treatments/actions in the entire dataset (here, the
+            threshold has no affect, as this distribution was observed regardless of the scores associated with each
+            observation).
+        -   ``Recommended``: The distribution of the recommendations of the model, where scores lower than the threshold
+            are considered as a recommendation for the neutral action.
+        -   ``Intersection``: The distribution of actions in the intersection set between the observed actions and the
+            ones recommended by the model.
 
         The upper chart describes the rate, or fraction, associated with each treatment for each of the groups listed
         above.
@@ -1711,7 +1711,7 @@ class Evaluator:
         observed = eval_res.df[eval_res.observed_action_field]
         # recommended actions
         recommendations = eval_res.df[eval_res.proposed_action_field].copy()
-        recommendations[eval_res.df[eval_res.score_field] >= thresh] = eval_res.control_indicator
+        recommendations[eval_res.df[eval_res.score_field] < thresh] = eval_res.control_indicator
         # intersection of recommendations and observed actions
         intersected_recommendations = recommendations.loc[recommendations == observed]
 
