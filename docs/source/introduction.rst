@@ -4,7 +4,7 @@ uplift-analysis
 
 .. include:: badges.rst
 
-``uplift-analysis`` is a ``Python`` library thatcontains implementations of methods and utilities, which can serve use
+``uplift-analysis`` is a ``Python`` library that contains implementations of methods and utilities, which can serve use
 cases requiring the analysis of uplift modeling techniques.
 The implemented modules include scoring utilities, analysis strategy, and relevant visualization methods.
 

@@ -13,7 +13,7 @@ uplift-analysis
 ![alt text](https://img.shields.io/badge/version-0.0.1-blue)
 ![alt text](https://img.shields.io/badge/license-MIT-blue)
 
-**uplift-analysis** is a ``Python`` library that contains implementations of methods and utilities, which can serve use 
+**uplift-analysis** is a ``Python`` library that contains implementations of methods and utilities, which can serve use
 cases requiring the analysis of uplift modeling techniques.<br/>
 The implemented modules include scoring utilities, analysis strategy, and relevant visualization methods.
 
@@ -36,22 +36,34 @@ The command above will automatically install all the required dependencies. Plea
 
 Getting started
 ---------------
-Check out the tutorial **place link** for a demonstration how to use the library.
+Check out the comprehensive [tutorial](broken_link) for a complete walk-through of the library.
 <span style="color:red">Still need to take care of this</span>.
+
+```python
+import pandas as pd
+from uplift_analysis import data, evaluation
+
+eval_set = data.EvalSet(df=pd.DataFrame({
+    'observed_action': treatments,
+    'responses': responses,
+    'score': scores,
+    'proposed_action': recommended_treatments
+}))
+
+evaluator = evaluation.Evaluator()
+eval_res, summary = evaluator.eval_and_show(eval_set, specify=['uplift'],
+                                            show_random=True, num_random_rep=4)
+```
+![uplift](./_images/uplift_curve.png)
 
 
 Documentation
 -------------
 For more information, refer to our
-[blogpost](broken_link)
-and
-[complete documentation](broken_link).
+[blogpost](broken_link),
+[complete documentation](broken_link), and [tutorial](broken_link).
 
 
-
-# Reference
-
-<span style="color:red">Is it relevant?</span>
 
 
 Info for developers
@@ -98,8 +110,6 @@ $ pytest                                      # run all tests
 $ pytest test_testmodule.py                   # run all tests within a module
 $ pytest test_testmodule.py -k test_testname  # run only 1 test
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
 
 License
 -------
