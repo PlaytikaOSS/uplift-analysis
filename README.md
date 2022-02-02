@@ -59,7 +59,7 @@ eval_res, summary = evaluator.eval_and_show(eval_set, specify=['uplift'],
 
 Documentation
 -------------
-For more information, refer to our
+For more information, refer to the accompanying
 [blogpost](broken_link),
 [complete documentation](broken_link), and [tutorial](broken_link).
 
