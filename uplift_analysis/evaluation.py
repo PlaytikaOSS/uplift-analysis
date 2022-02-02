@@ -262,8 +262,8 @@ class Evaluator:
             'fractional_lift': self.display_fractional_lift_curve,
             'gain': self.display_gain,
             'avg_response': self.display_avg_response,
-            'targeted_region': self.display_targeted_region_stats,
-            'untargeted_region': self.display_untargeted_region_stats,
+            'acceptance_region': self.display_acceptance_region_stats,
+            'rejection_region': self.display_rejection_region_stats,
             'agreements': self.display_agreement_stats,
             'score_distribution': self.display_score_distribution,
         }
@@ -830,7 +830,7 @@ class Evaluator:
                                             max_quantile=(1 - self.min_quantile),
                                             label=f'UnexposedResponseRatio')
 
-            ax.set_ylabel('Uplift Estimate')
+            ax.set_ylabel('Fractional Lift')
             ax.grid(True)
             ax.legend(fancybox=True, shadow=True)
 
@@ -967,6 +967,7 @@ class Evaluator:
             ax.legend(fancybox=True, shadow=True)
 
         ax.set_xlabel('Sample Score Quantiles (Descending) / Exposed Fraction')
+        ax.set_ylabel('Gain')
         ax.set_title(f"Gain Curve\n{title_suffix}")
 
         return ax
@@ -1163,7 +1164,8 @@ class Evaluator:
                        color='darkgoldenrod', linestyle=':', lw=2, label='UntreatedAvgResponse')
 
             ax.grid(True)
-            ax.legend(fancybox=True, shadow=True)
+            ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.05),
+                      ncol=4, fancybox=True, shadow=True, fontsize=12)
 
         ax.set_xlabel('Sample Score Quantiles (Descending) / Exposed Fraction')
         ax.set_ylabel('AverageResponse Estimate')
@@ -1171,14 +1173,14 @@ class Evaluator:
 
         return ax
 
-    def display_targeted_region_stats(self,
-                                      eval_res: Union[Dict[str, EvalSet], EvalSet],
-                                      num_sets: Optional[Union[None, int]] = None,
-                                      average: Optional[bool] = False,
-                                      title_suffix: Optional[str] = '',
-                                      random_sets: Optional[Union[List[EvalSet], None]] = None,
-                                      **kwargs
-                                      ) -> Axes:
+    def display_acceptance_region_stats(self,
+                                        eval_res: Union[Dict[str, EvalSet], EvalSet],
+                                        num_sets: Optional[Union[None, int]] = None,
+                                        average: Optional[bool] = False,
+                                        title_suffix: Optional[str] = '',
+                                        random_sets: Optional[Union[List[EvalSet], None]] = None,
+                                        **kwargs
+                                        ) -> Axes:
         """
         This method provides a visualization of the estimated average response, among certain subgroups of the input
         ``EvalSet``(s), in the acceptance region, i.e. where the scores lie within some upper quantile.
@@ -1341,18 +1343,18 @@ class Evaluator:
 
         ax.set_xlabel('Sample Score Quantiles (Descending) / Exposed Fraction')
         ax.set_ylabel('AverageResponse Estimate')
-        ax.set_title(f"Targeted Region - Average Responses \n{title_suffix}")
+        ax.set_title(f"Acceptance Region - Average Responses \n{title_suffix}")
 
         return ax
 
-    def display_untargeted_region_stats(self,
-                                        eval_res: Union[Dict[str, EvalSet], EvalSet],
-                                        num_sets: Optional[Union[None, int]] = None,
-                                        average: Optional[bool] = False,
-                                        title_suffix: Optional[str] = '',
-                                        random_sets: Optional[Union[List[EvalSet], None]] = None,
-                                        **kwargs
-                                        ) -> Axes:
+    def display_rejection_region_stats(self,
+                                       eval_res: Union[Dict[str, EvalSet], EvalSet],
+                                       num_sets: Optional[Union[None, int]] = None,
+                                       average: Optional[bool] = False,
+                                       title_suffix: Optional[str] = '',
+                                       random_sets: Optional[Union[List[EvalSet], None]] = None,
+                                       **kwargs
+                                       ) -> Axes:
         """
         This method provides a visualization of the estimated average response, among certain subgroups of the input
         ``EvalSet``(s), outside the *acceptance region* (or inside the *rejection region*), i.e. where the scores lie
@@ -1507,14 +1509,14 @@ class Evaluator:
             ax2 = ax.twinx()
             pval.plot(ax=ax2, color='k', label='pVal vs Untreated', lw=1)
             ax2.set_yscale('log')
-            ax2.legend(loc='upper center', bbox_to_anchor=(0.5, 1.05), fancybox=True, shadow=True)
+            ax2.legend(loc='upper center', bbox_to_anchor=(0.4, 1.05), fancybox=True, shadow=True)
             ax2.set_ylabel('p-value Difference Test')
             ax.grid(True)
-            ax.legend(fancybox=True, shadow=True)
+            ax.legend(loc='upper center', bbox_to_anchor=(0.75, 1.00), fancybox=True, shadow=True)
 
         ax.set_xlabel('Sample Score Quantiles (Descending) / Exposed Fraction')
         ax.set_ylabel('AverageResponse Estimate')
-        ax.set_title(f"UnTargeted Region - Average Responses \n{title_suffix}")
+        ax.set_title(f"Rejection Region - Average Responses \n{title_suffix}")
 
         return ax
 
@@ -1651,7 +1653,7 @@ class Evaluator:
         ax.grid(True)
         ax.legend(fancybox=True, shadow=True)
         ax.set_xlabel('Sample Score Quantiles (Descending) / Exposed Fraction')
-        ax.set_ylabel('Rate of Intersections (Among Targeted)')
+        ax.set_ylabel('Rate of Intersections (In Acceptance Region)')
         ax.set_title(f"Agreement/Intersection Statistics\n{title_suffix}")
         return ax
 
