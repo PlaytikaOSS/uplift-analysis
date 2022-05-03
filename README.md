@@ -21,8 +21,7 @@ This library works for Python 3.7 and higher.
 
 Installation
 ------------
-This library is distributed on [PyPi](ttps://pypi.org/project/uplift-analysis) and can be installed using ``pip``.
-<span style="color:red">Still need to take care of this</span>.
+This library is distributed on [PyPi](https://pypi.org/project/uplift-analysis) and can be installed using ``pip``.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 $ pip install uplift-analysis 
@@ -31,13 +30,11 @@ $ pip install uplift-analysis
 The command above will automatically install all the required dependencies. Please visit the
 [installation](https://playtikaresearch.github.io/uplift-analysis/build/html/installation.html) page for more details.
 
-<span style="color:red">Still need to take care of this</span>.
 
 
 Getting started
 ---------------
 Check out the comprehensive [tutorial](https://playtikaresearch.github.io/uplift-analysis/build/html/tutorials.html) for a complete walk-through of the library.
-<span style="color:red">Still need to take care of this</span>.
 
 ```python
 import pandas as pd
