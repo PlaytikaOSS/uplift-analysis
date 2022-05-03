@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>uplift_analysis.evaluation module &mdash; uplift-analysis 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="uplift_analysis.visualization module" href="uplift_analysis.visualization.html" />
+    <link rel="prev" title="uplift_analysis.data module" href="uplift_analysis.data.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> uplift-analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">uplift-analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">uplift-analysis Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="uplift_analysis.scoring.html">uplift_analysis.scoring module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="uplift_analysis.data.html">uplift_analysis.data module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">uplift_analysis.evaluation module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="uplift_analysis.visualization.html">uplift_analysis.visualization module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="uplift_analysis.utils.html">uplift_analysis.utils module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">uplift-analysis</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">uplift-analysis Modules</a> &raquo;</li>
+      <li>uplift_analysis.evaluation module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/uplift_analysis.evaluation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="module-uplift_analysis.evaluation">
+<span id="uplift-analysis-evaluation-module"></span><h1>uplift_analysis.evaluation module<a class="headerlink" href="#module-uplift_analysis.evaluation" title="Permalink to this headline"></a></h1>
+<p>This module implements an uplift evaluation utility wrapped as a class named Evaluator.
+After specifying the relevant field names on the corresponding dataset (represented as a pandas dataframe or as a
+<code class="docutils literal notranslate"><span class="pre">data.EvalSet</span></code> object), the provided dataset will be analyzed, in terms of uplift.</p>
+<p>The evaluation takes into account cases of multiple treatments; In case the actions in the evaluated set are binary
+(single treatment) the evaluation metrics will end up being identical for the multiple-actions scenario and the binary
+one.</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Evaluator</span></code> also supports use-cases with multiple treatments.</p></li>
+</ul>
+<dl class="py class">
+<dt class="sig sig-object py" id="uplift_analysis.evaluation.Evaluator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">uplift_analysis.evaluation.</span></span><span class="sig-name descname"><span class="pre">Evaluator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sets_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#uplift_analysis.evaluation.Evaluator" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluator class is used for uplift evaluation of a given dataset, represented as a pandas Dataframe, or as
+an EvalSet object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sets_config</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>Dict</em><em>, </em><em>None</em><em>]</em><em>]</em>) – A set of configuration parameters, to be used for creating EvalSet objects of pandas Dataframes, if required.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="uplift_analysis.evaluation.Evaluator.evaluate_set">
+<span class="sig-name descname"><span class="pre">evaluate_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_set</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#uplift_analysis.evaluation.Evaluator.evaluate_set" title="Permalink to this definition"></a></dt>
+<dd><p>This method serves as a primary interface of the class. Given a scored dataset, represented as a pandas
+DataFrame or as an <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object, this function performs uplift analysis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input_set</strong> (<em>Union</em><em>[</em><em>pd.DataFrame</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em>) – The dataset to be evaluated. If provided as dataframe, it will be transformed into a corresponding
+<code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object, according to the <code class="docutils literal notranslate"><span class="pre">sets_config</span></code> property.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>EvalSet</em> – The provided dataset after applying uplift analysis on it.</p></li>
+<li><p><em>Dict</em> – A summary of the analysis.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="uplift_analysis.evaluation.Evaluator.evaluate_multiple">
+<span class="sig-name descname"><span class="pre">evaluate_multiple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scored_sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#uplift_analysis.evaluation.Evaluator.evaluate_multiple" title="Permalink to this definition"></a></dt>
+<dd><p>This method utilizes the primary method <code class="docutils literal notranslate"><span class="pre">evaluate_set()</span></code> for evaluating multiple scored sets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scored_sets</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>pd.DataFrame</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>]</em>) – The collection of scored datasets to be evaluated, represented by a dictionary indexed by the name of
+each method/experiment.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>eval_res</strong> (<em>Dict[str,EvalSet]</em>) – A dictionary containing the evaluation result of each input dataset.</p></li>
+<li><p><strong>comparison_df</strong> (<em>pd.DataFrame</em>) – A dataframe representing the comparison between the evaluated dataframes.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="uplift_analysis.evaluation.Evaluator.summarize_evaluation">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">summarize_evaluation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eval_set</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="headerlink" href="#uplift_analysis.evaluation.Evaluator.summarize_evaluation" title="Permalink to this definition"></a></dt>
+<dd><p>This function narrows down the evaluation of a dataset into a summary of the evaluated metrics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>eval_set</strong> (<a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a>) – The evaluated dataset.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A summary of the evaluation results.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="uplift_analysis.evaluation.Evaluator.integrate">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.series.Series</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#uplift_analysis.evaluation.Evaluator.integrate" title="Permalink to this definition"></a></dt>
+<dd><p>A static method for performing integration of a given signal based on Simpson’s rule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>Union</em><em>[</em><em>np.ndarray</em><em>, </em><em>pd.Series</em><em>]</em>) – The signal to integrate.</p></li>
+<li><p><strong>dx</strong> (<em>float</em>) – The sampling interval according to which the signal is sampled.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The integration result.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="uplift_analysis.evaluation.Evaluator.get_max">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eval_set</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#uplift_analysis.evaluation.Evaluator.get_max" title="Permalink to this definition"></a></dt>
+<dd><p>A static method for retriveing the coordinates of the maximal value of a specific input signal, and the
+score associated with the maximal value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eval_set</strong> (<a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a>) – The object containing the signal in which the maximal value will be located.</p></li>
+<li><p><strong>metric</strong> – The name of the signal. Generally, corresponds to a column on the dataframe hosted in the
+<code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary containing a key ‘point’, in which the coordinates of the maximal value are stored,
+and <cite>value</cite>, which specifies the score value corresponding to the maximal point.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="uplift_analysis.evaluation.Evaluator.visualization_methods">
+<span class="sig-name descname"><span class="pre">visualization_methods</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#uplift_analysis.evaluation.Evaluator.visualization_methods" title="Permalink to this definition"></a></dt>
+<dd><p>This method will list and index all the visualization methods this class has to offer.
+Only the methods listed as part of this function, will be taken into account, when calling
+<code class="docutils literal notranslate"><span class="pre">Evaluator.visualize()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A dictionary specifying the keyword associated with each support visualization method.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[str,Callable]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="uplift_analysis.evaluation.Evaluator.visualize">
+<span class="sig-name descname"><span class="pre">visualize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eval_res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_random</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_random_rep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">specify</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#uplift_analysis.evaluation.Evaluator.visualize" title="Permalink to this definition"></a></dt>
+<dd><p>This method provides and generates a set of charts for the description of the provided evaluation results.</p>
+<p>As opposed to calls in which <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> holds multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects, in cases where the provided
+<code class="docutils literal notranslate"><span class="pre">eval_res</span></code> will contain only a single <code class="docutils literal notranslate"><span class="pre">data.EvalSet</span></code> object, the generated chart will contain more
+interesting visualization that provide information enrichment (distinct additions for each chart).</p>
+<p>On most of the created charts, the x-axis corresponds to upper quantiles of the score distribution - i.e. after
+the scores on a given <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object are sorted in a descending manner, as part of the evaluation procedure,
+we refer to a <code class="docutils literal notranslate"><span class="pre">normalized_index</span></code> which is simply a mapping between the scores and the range of (0,1], so that
+the highest score is mapped to nearest to zero as possible, and the lowest score is mapped to one. With this,
+the <code class="docutils literal notranslate"><span class="pre">Exposed</span> <span class="pre">Fraction</span></code>, as noted in the charts labels, refers to calculations that include the observations
+up to (or from) a specific value of the <code class="docutils literal notranslate"><span class="pre">normalized_index</span></code>. For example, on the <strong>Uplift Curve</strong> chart, the
+vertical <code class="docutils literal notranslate"><span class="pre">x=0.4</span></code> corresponds to calculated estimations taking into account model recommendations only of the
+top 40% precent scores.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eval_res</strong> (<em>Union</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em>) – The collection of evaluated sets, or a single one, for which a set of descriptive charts will be displayed.</p></li>
+<li><p><strong>average</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – A boolean indicating whether to display the average performance as well. Relevant only if <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> is
+a collection (<code class="docutils literal notranslate"><span class="pre">dict</span></code>)  of multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects.</p></li>
+<li><p><strong>title_suffix</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Optional string to add to the title of the charts.</p></li>
+<li><p><strong>show_random</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – If true, will create a randomly-scored corresponding set and display it as a benchmark. Relevant only when
+eval_res contains a single EvalSet.</p></li>
+<li><p><strong>num_random_rep</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – The number of randomly-scores sets to average. Used only when <code class="docutils literal notranslate"><span class="pre">show_random</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>specify</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>, </em><em>None</em><em>]</em>) – A list for specifying only a partial list of charts to display. Every element in the list must be included
+in <code class="docutils literal notranslate"><span class="pre">self.visualization_methods()</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="uplift_analysis.evaluation.Evaluator.eval_and_show">
+<span class="sig-name descname"><span class="pre">eval_and_show</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">typing.Union[pandas.core.frame.DataFrame,</span> <span class="pre">uplift_analysis.data.EvalSet,</span> <span class="pre">typing.Dict[str,</span> <span class="pre">typing.Union[pandas.core.frame.DataFrame,</span> <span class="pre">uplift_analysis.data.EvalSet]]]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#uplift_analysis.evaluation.Evaluator.eval_and_show" title="Permalink to this definition"></a></dt>
+<dd><p>This method allows to use a single call for performing both the evaluation and the visualization of single /
+multiple scored datasets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>Union</em><em>[</em><em>pd.DataFrame</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>pd.DataFrame</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>]</em><em>]</em>) – The scored input data, whether it is a single or multiple datasets.</p></li>
+<li><p><strong>kwargs</strong> – Arbitrary keyword arguments, which will be passed to <code class="docutils literal notranslate"><span class="pre">Evaluator.visualize()</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>eval_res</strong> (<em>Union[EvalSet, Dict[str,EvalSet]]</em>) – The evaluation result, whether it is a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code>, or a dictionary of such (in case the input `
+<cite>data`</cite> contained several datasets).</p></li>
+<li><p><strong>summary</strong> (<em>Union[Dict, pd.DataFrame]</em>) – A dictionary containing the summary of the analysis, if only a single input set was provided, or a
+dataframe representing the comparison between the evaluated dataframes, in the case of multiple input sets.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="uplift_analysis.evaluation.Evaluator.display_score_distribution">
+<span class="sig-name descname"><span class="pre">display_score_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eval_res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">matplotlib.axes._axes.Axes</span></span></span><a class="headerlink" href="#uplift_analysis.evaluation.Evaluator.display_score_distribution" title="Permalink to this definition"></a></dt>
+<dd><p>This method provides a visualization of the score density distribution in the input evaluated dataset(s).
+According to <code class="docutils literal notranslate"><span class="pre">Evaluator.visualization_methods()</span></code>, this method fits the keyword <code class="docutils literal notranslate"><span class="pre">score_distribution</span></code>.</p>
+<p>If the input <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code>, the overall score density, will be plotted, alongisde
+with the densities of the scores for the treated group, and the untreated group separately.
+If the single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object is associated with <code class="docutils literal notranslate"><span class="pre">multiple_actions</span></code>, then the score density for each
+observed treatment will also be separately plotted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eval_res</strong> (<em>Union</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em>) – The input evaluated dataset(s).</p></li>
+<li><p><strong>num_sets</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>None</em><em>, </em><em>int</em><em>]</em><em>]</em>) – The number of <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects in <code class="docutils literal notranslate"><span class="pre">eval_res</span></code>. If not provided, inferred independently.</p></li>
+<li><p><strong>title_suffix</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Optional string to add to the title of the chart.</p></li>
+<li><p><strong>kwargs</strong> – Arbitrary keyword arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ax</strong> – The axes on which the visualization was created, for further manipulation if required.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Axes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="uplift_analysis.evaluation.Evaluator.display_uplift_curve">
+<span class="sig-name descname"><span class="pre">display_uplift_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eval_res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">matplotlib.axes._axes.Axes</span></span></span><a class="headerlink" href="#uplift_analysis.evaluation.Evaluator.display_uplift_curve" title="Permalink to this definition"></a></dt>
+<dd><p>This method provides a visualization of the uplift curve(s) implied by the input evaluated dataset(s).
+According to <code class="docutils literal notranslate"><span class="pre">Evaluator.visualization_methods()</span></code>, this method fits the keyword <code class="docutils literal notranslate"><span class="pre">uplift</span></code>.</p>
+<p>The uplift curve describes, for each upper quantile, the difference in average response between the group of
+observations which were treated in accordance with the model recommendations, and a reference group of
+observations (e.g. observations which were not treated at all). The difference is computed for each upper
+quantile <code class="docutils literal notranslate"><span class="pre">q</span></code>, i.e. we take the observations from the upper <em>q</em>-th quantile of the dataset, split into the
+relevant groups, and compute the difference in average response between these groups. Combining the
+calculations for all the quantiles, yields the uplift curve.
+Hence, the x-axis corresponds to upper quantiles of the score distribution - i.e. after
+the scores on a given <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object are sorted in a descending manner, as part of the evaluation procedure,
+we refer to a <code class="docutils literal notranslate"><span class="pre">normalized_index</span></code> which is simply a mapping between the scores and the range of (0,1], so that
+the highest score is mapped to nearest to zero as possible, and the lowest score is mapped to one. With this,
+the <code class="docutils literal notranslate"><span class="pre">Exposed</span> <span class="pre">Fraction</span></code>, as noted in the charts labels, refers to calculations that include the observations
+up to (or from) a specific value of the <code class="docutils literal notranslate"><span class="pre">normalized_index</span></code>.</p>
+<p>Uplift curves will be labeled together with their corresponding Area Under Uplift Curve (AUUC), which is the
+result of the integral under the curve.</p>
+<p>In case the provided <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code>s, the visualization will contain, for each of
+the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects, the curve of the uplift between the group in which the recommendations of the model
+intersect with the observed actions, and the group of observations associated with the neutral action
+(untreated). Each curve will be labeled according to its corresponding key on the provided dictionary.
+If <code class="docutils literal notranslate"><span class="pre">average=True</span></code>, the chart will also contain the average performance, computed across the multiple
+<code class="docutils literal notranslate"><span class="pre">EvalSet</span></code>s provided (labeled as <strong>Avg</strong>).</p>
+<p>In case the provided <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> the visualization will contain the following
+curves:</p>
+<ul class="simple">
+<li><p><strong>Intersection Uplift</strong> - uplift between the group in which the recommendations of the model
+intersect with the observed actions, and the group of observations associated with the neutral action
+(untreated).</p></li>
+<li><p><strong>Random</strong> - the average uplift curve (just like the <strong>Intersection Uplift</strong> curve) calculated across
+the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects contained in <code class="docutils literal notranslate"><span class="pre">random_sets</span></code>, if provided.</p></li>
+<li><p><strong>Treated Uplift</strong> - (relevant in case the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> is associated with multiple actions) uplift between
+the treated group, disregarding the identity of the exact treatment, and the group of observations
+associated with the neutral action (untreated).</p></li>
+<li><p><strong>Realized Vs Unrealized Uplift</strong> - (relevant in case the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> is associated with multiple actions)
+uplift between the group in which the recommendations of the model intersect with the observed actions
+(<em>realized</em>), and the group of observations in which the recommendations do not intersect with the observed
+actions (<em>unrealized</em>). Here, observations in the reference group can be associated with some non-neutral
+action, but just not the one recommended by the model.</p></li>
+<li><p><strong>UnexposedResponseDiff</strong> - the difference in average response in the complement region of the dataset, i.e.
+for each upper quantile <code class="docutils literal notranslate"><span class="pre">q</span></code>, this curve takes into account the average responses of the treated group and
+the untreated group, in the lower <code class="docutils literal notranslate"><span class="pre">(1-q)</span></code> quantiles of the score, and subtracts between them. A
+positive-valued curve implies that the average response of the untreated group, is higher than that of the
+treated group, for some lower quantile score of the dataset.</p></li>
+<li><p>In addition, the black dashed line, corresponding to the right y-axis, provides information about the
+fraction of the treated subgroup in general, that is located in the upper quantile <code class="docutils literal notranslate"><span class="pre">q</span></code>. If this line is
+linear, it implies that the treated observations and the untreated observations are distributed similarly,
+in terms of score.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eval_res</strong> (<em>Union</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em>) – The input evaluated dataset(s).</p></li>
+<li><p><strong>num_sets</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>None</em><em>, </em><em>int</em><em>]</em><em>]</em>) – The number of <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects in <code class="docutils literal notranslate"><span class="pre">eval_res</span></code>. If not provided, inferred independently.</p></li>
+<li><p><strong>average</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – A boolean indicating whether to display the average performance as well. Relevant only if <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> is
+a collection (<code class="docutils literal notranslate"><span class="pre">dict</span></code>)  of multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects.</p></li>
+<li><p><strong>title_suffix</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Optional string to add to the title of the chart.</p></li>
+<li><p><strong>random_sets</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>, </em><em>None</em><em>]</em><em>]</em>) – A list of randomly scored <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects, for benchmarking the performance associated with the
+evaluated dataset, if desired. Relevant only if <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object.</p></li>
+<li><p><strong>kwargs</strong> – Arbitrary keyword arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ax</strong> – The axes on which the visualization was created, for further manipulation if required.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Axes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="uplift_analysis.evaluation.Evaluator.display_fractional_lift_curve">
+<span class="sig-name descname"><span class="pre">display_fractional_lift_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eval_res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">matplotlib.axes._axes.Axes</span></span></span><a class="headerlink" href="#uplift_analysis.evaluation.Evaluator.display_fractional_lift_curve" title="Permalink to this definition"></a></dt>
+<dd><p>This method provides a visualization of the fractional lift curve(s) implied by the input evaluated dataset(s).
+According to <code class="docutils literal notranslate"><span class="pre">Evaluator.visualization_methods()</span></code>, this method fits the keyword <code class="docutils literal notranslate"><span class="pre">fractional_lift</span></code>.</p>
+<p>The uplift curve describes, for each upper quantile, the ratio in average response between the group of
+observations which were treated in accordance with the model recommendations, and a reference group of
+observations (e.g. observations which were not treated at all). The ratio is computed for each upper
+quantile <code class="docutils literal notranslate"><span class="pre">q</span></code>, i.e. we take the observations from the upper <em>q</em>-th quantile of the dataset, split into the
+relevant groups, and compute the ratio of average response between these groups. Combining the
+calculations for all the quantiles, yields the fractional lift curve.
+Hence, the x-axis corresponds to upper quantiles of the score distribution - i.e. after
+the scores on a given <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object are sorted in a descending manner, as part of the evaluation procedure,
+we refer to a <code class="docutils literal notranslate"><span class="pre">normalized_index</span></code> which is simply a mapping between the scores and the range of (0,1], so that
+the highest score is mapped to nearest to zero as possible, and the lowest score is mapped to one. With this,
+the <code class="docutils literal notranslate"><span class="pre">Exposed</span> <span class="pre">Fraction</span></code>, as noted in the charts labels, refers to calculations that include the observations
+up to (or from) a specific value of the <code class="docutils literal notranslate"><span class="pre">normalized_index</span></code>.</p>
+<p>Fractional lift curves will be labeled together with their corresponding Area Under Uplift Curve (AUUC),
+which is the result of the integral under the curve.</p>
+<p>In case the provided <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code>s, the visualization will contain, for each of
+the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects, the curve of the fractional lift between the group in which the recommendations
+of the model intersect with the observed actions, and the group of observations associated with the neutral
+action (untreated). Each curve will be labeled according to its corresponding key on the provided dictionary.
+If <code class="docutils literal notranslate"><span class="pre">average=True</span></code>, the chart will also contain the average performance, computed across the multiple
+<code class="docutils literal notranslate"><span class="pre">EvalSet</span></code>s provided (labeled as <strong>Avg</strong>).</p>
+<p>In case the provided <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> the visualization will contain the following
+curves:</p>
+<ul class="simple">
+<li><p><strong>Fractional Uplift</strong> - fractional lift between the group in which the recommendations of the model
+intersect with the observed actions, and the group of observations associated with the neutral action
+(untreated).</p></li>
+<li><p><strong>Random</strong> - the average fractional lift curve (just like the <strong>Fractional Uplift</strong> curve) calculated across
+the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects contained in <code class="docutils literal notranslate"><span class="pre">random_sets</span></code>, if provided.</p></li>
+<li><p><strong>FracLift Treated</strong> - (relevant in case the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> is associated with multiple actions) fractional
+lift between the treated group, disregarding the identity of the exact treatment, and the group of
+observations associated with the neutral action (untreated).</p></li>
+<li><p><strong>FracLift Vs Unrealized</strong> - (relevant in case the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> is associated with multiple actions)
+fractional lift between the group in which the recommendations of the model intersect with the observed
+actions (<em>realized</em>), and the group of observations in which the recommendations do not intersect with the
+observed actions (<em>unrealized</em>). Here, observations in the reference group can be associated with some
+non-neutral action, but just not the one recommended by the model.</p></li>
+<li><p><strong>UnexposedResponseRatio</strong> - the ratio of average response in the complement region of the dataset, i.e.
+for each upper quantile <code class="docutils literal notranslate"><span class="pre">q</span></code>, this curve takes into account the average responses of the treated group and
+the untreated group, in the lower <code class="docutils literal notranslate"><span class="pre">(1-q)</span></code> quantiles of the score, and subtracts between them.
+Values bigger than 1.0, imply that the average response of the untreated group, is higher than that of the
+treated group, for some lower quantile score of the dataset.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eval_res</strong> (<em>Union</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em>) – The input evaluated dataset(s).</p></li>
+<li><p><strong>num_sets</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>None</em><em>, </em><em>int</em><em>]</em><em>]</em>) – The number of <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects in <code class="docutils literal notranslate"><span class="pre">eval_res</span></code>. If not provided, inferred independently.</p></li>
+<li><p><strong>average</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – A boolean indicating whether to display the average performance as well. Relevant only if <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> is
+a collection (<code class="docutils literal notranslate"><span class="pre">dict</span></code>)  of multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects.</p></li>
+<li><p><strong>title_suffix</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Optional string to add to the title of the chart.</p></li>
+<li><p><strong>random_sets</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>, </em><em>None</em><em>]</em><em>]</em>) – A list of randomly scored <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects, for benchmarking the performance associated with the
+evaluated dataset, if desired. Relevant only if <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object.</p></li>
+<li><p><strong>kwargs</strong> – Arbitrary keyword arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ax</strong> – The axes on which the visualization was created, for further manipulation if required.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Axes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="uplift_analysis.evaluation.Evaluator.display_gain">
+<span class="sig-name descname"><span class="pre">display_gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eval_res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">matplotlib.axes._axes.Axes</span></span></span><a class="headerlink" href="#uplift_analysis.evaluation.Evaluator.display_gain" title="Permalink to this definition"></a></dt>
+<dd><p>This method provides a visualization of the gain curve(s) implied by the input evaluated dataset(s).
+According to <code class="docutils literal notranslate"><span class="pre">Evaluator.visualization_methods()</span></code>, this method fits the keyword <code class="docutils literal notranslate"><span class="pre">gain</span></code>.</p>
+<p>The gain curve describes, for each upper quantile, the multiplication of two factors:</p>
+<ul class="simple">
+<li><p>difference in average response between the group of observations which were treated in accordance with the
+model recommendations, and a reference group of observations (e.g. observations which were not treated at
+all). The difference is computed for each upper quantile <code class="docutils literal notranslate"><span class="pre">q</span></code>, i.e. we take the observations from the upper
+<em>q</em>-th quantile of the dataset, split into the relevant groups, and compute the difference in average
+response between these groups.</p></li>
+<li><p>The absolute number of untreated observations, found in the upper <code class="docutils literal notranslate"><span class="pre">q</span></code>-th quantile, which grows bigger as
+<code class="docutils literal notranslate"><span class="pre">q</span></code> goes bigger.</p></li>
+</ul>
+<p>Multiplying these factors can be used to describe, the gain the model would yield, if it would have been <em>in
+action</em>, i.e. if we could count on the estimated difference in average response, and apply the actions
+recommended by the model, to the untreated observations, what is the quantity that will be added to the overall
+sum of responses.
+Combining the calculations of gain for all the quantiles, yields the gain curve.
+Hence, the x-axis corresponds to upper quantiles of the score distribution - i.e. after
+the scores on a given <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object are sorted in a descending manner, as part of the evaluation procedure,
+we refer to a <code class="docutils literal notranslate"><span class="pre">normalized_index</span></code> which is simply a mapping between the scores and the range of (0,1], so that
+the highest score is mapped to nearest to zero as possible, and the lowest score is mapped to one. With this,
+the <code class="docutils literal notranslate"><span class="pre">Exposed</span> <span class="pre">Fraction</span></code>, as noted in the charts labels, refers to calculations that include the observations
+up to (or from) a specific value of the <code class="docutils literal notranslate"><span class="pre">normalized_index</span></code>.</p>
+<p>In case the provided <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code>s, the visualization will contain, for each of
+the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects, the gain curve corresponding to the uplift between the group in which the
+recommendations of the model intersect with the observed actions, and the group of observations associated with
+the neutral action (untreated). Each curve will be labeled according to its corresponding key on the provided
+dictionary. If <code class="docutils literal notranslate"><span class="pre">average=True</span></code>, the chart will also contain the average performance, computed across the
+multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code>s provided (labeled as <strong>Avg</strong>).</p>
+<p>In case the provided <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> the visualization will contain the following
+curves:</p>
+<ul class="simple">
+<li><p><strong>Intersection Gain</strong> - gain assciated with the uplift between the group in which the recommendations
+of the model intersect with the observed actions, and the group of observations associated with the neutral
+action (untreated).</p></li>
+<li><p><strong>Treated Gain</strong> - (relevant in case the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> is associated with multiple actions) gain associated
+with the uplift between the treated group, disregarding the identity of the exact treatment, and the group
+of observations associated with the neutral action (untreated).</p></li>
+<li><p><strong>Random</strong> - the average gain curve (just like the <strong>Intersection Gain</strong> curve) calculated across
+the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects contained in <code class="docutils literal notranslate"><span class="pre">random_sets</span></code>, if provided.</p></li>
+<li><p>In addition, the maximal gain points along the gain curves, are highlighted by markers, and labeled with the
+score value that corresponds to these points.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eval_res</strong> (<em>Union</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em>) – The input evaluated dataset(s).</p></li>
+<li><p><strong>num_sets</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>None</em><em>, </em><em>int</em><em>]</em><em>]</em>) – The number of <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects in <code class="docutils literal notranslate"><span class="pre">eval_res</span></code>. If not provided, inferred independently.</p></li>
+<li><p><strong>average</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – A boolean indicating whether to display the average performance as well. Relevant only if <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> is
+a collection (<code class="docutils literal notranslate"><span class="pre">dict</span></code>)  of multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects.</p></li>
+<li><p><strong>title_suffix</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Optional string to add to the title of the chart.</p></li>
+<li><p><strong>random_sets</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>, </em><em>None</em><em>]</em><em>]</em>) – A list of randomly scored <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects, for benchmarking the performance associated with the
+evaluated dataset, if desired. Relevant only if <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object.</p></li>
+<li><p><strong>kwargs</strong> – Arbitrary keyword arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ax</strong> – The axes on which the visualization was created, for further manipulation if required.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Axes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="uplift_analysis.evaluation.Evaluator.display_avg_response">
+<span class="sig-name descname"><span class="pre">display_avg_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eval_res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">matplotlib.axes._axes.Axes</span></span></span><a class="headerlink" href="#uplift_analysis.evaluation.Evaluator.display_avg_response" title="Permalink to this definition"></a></dt>
+<dd><p>This method provides a visualization of the expected response curve(s) implied by the input evaluated
+dataset(s).
+According to <code class="docutils literal notranslate"><span class="pre">Evaluator.visualization_methods()</span></code>, this method fits the keyword <code class="docutils literal notranslate"><span class="pre">avg_response</span></code>.</p>
+<p>The expected response curve describes, for each quantile <em>q</em>, a weighted average between two factors:</p>
+<ul class="simple">
+<li><p>The average response, within the <em>q</em>-th upper score quantile, of the group of observations in which the
+actions recommended by the model intersect with the observed actions. This factor is weighted by <code class="docutils literal notranslate"><span class="pre">q</span></code>.</p></li>
+<li><p>The average response, within the <em>(1-q)</em>-th lower score quantile, of the untreated group, i.e. the group of
+observations associated with the neutral action. This factor is weighted by <code class="docutils literal notranslate"><span class="pre">1-q</span></code>.</p></li>
+</ul>
+<p>The expected response curve, can be used to estimate, for each qunatile <code class="docutils literal notranslate"><span class="pre">q</span></code>, the average response of the
+<strong>entire population</strong>, if we <em>expose</em> the <em>q</em>-th upper qunatiles of the score distribution to the
+recommendations of the model.</p>
+<p>In case the provided <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code>s, the visualization will contain, for each of
+the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects, the expected response curve in which intersections are considered only where the
+observed actions corresponds to the exact specific action recommended by the model. Each curve will be labeled
+according to its corresponding key on the provided dictionary. If <code class="docutils literal notranslate"><span class="pre">average=True</span></code>, the chart will also contain
+the average performance, computed across the multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code>s provided (labeled as <strong>Avg</strong>).</p>
+<p>In case the provided <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> the visualization will contain the following
+curves:</p>
+<ul class="simple">
+<li><p><strong>IntersectionExpectedResponse</strong> - the expected response curve in which intersections are considered only
+where the observed actions corresponds to the exact specific action recommended by the model. The maximal
+point along this curve is highlighted by a corresponding marker, and labeled with the corresponding score
+value.</p></li>
+<li><p><strong>TreatedExpectedResponse</strong> - (relevant in case the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> is associated with multiple actions) regards
+the entire set of non-neutral actions as a single binary action, and describes the expected response where
+intersections are counted accordingly. The maximal point along this curve is highlighted by a corresponding
+marker, and labeled with the corresponding score value.</p></li>
+<li><p><strong>Random</strong> - the expected response curve (just like the <strong>IntersectionExpectedResponse</strong> curve) calculated
+across the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects contained in <code class="docutils literal notranslate"><span class="pre">random_sets</span></code>, if provided.</p></li>
+<li><p><strong>AvgResponseIntersectedTreatments</strong> - for each upper quantile, <em>q</em>, describes the average response of the
+observations in which the recommended treatment by the model, intersects with the observed treatment. This
+curve is also accompanied by an uncertainty sleeve, describing the confidence interval according to the
+corredsponding standard error of the estimated average response.</p></li>
+<li><p><strong>AvgResponseUntreated</strong> - for each upper quantile, <em>q</em>, describes the average response of the
+untreated observations. This curve is also accompanied by an uncertainty sleeve, describing the confidence
+interval according to the corredsponding standard error of the estimated average response.</p></li>
+<li><p><strong>OverallAvgResponse</strong> - describes the average response observed for the entire dataset, disregarding
+score values.</p></li>
+<li><p><strong>UntreatedAvgResponse</strong> - describes the average response among the untreated observations, disregarding
+score values.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eval_res</strong> (<em>Union</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em>) – The input evaluated dataset(s).</p></li>
+<li><p><strong>num_sets</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>None</em><em>, </em><em>int</em><em>]</em><em>]</em>) – The number of <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects in <code class="docutils literal notranslate"><span class="pre">eval_res</span></code>. If not provided, inferred independently.</p></li>
+<li><p><strong>average</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – A boolean indicating whether to display the average performance as well. Relevant only if <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> is
+a collection (<code class="docutils literal notranslate"><span class="pre">dict</span></code>)  of multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects.</p></li>
+<li><p><strong>title_suffix</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Optional string to add to the title of the chart.</p></li>
+<li><p><strong>random_sets</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>, </em><em>None</em><em>]</em><em>]</em>) – A list of randomly scored <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects, for benchmarking the performance associated with the
+evaluated dataset, if desired. Relevant only if <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object.</p></li>
+<li><p><strong>kwargs</strong> – Arbitrary keyword arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ax</strong> – The axes on which the visualization was created, for further manipulation if required.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Axes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="uplift_analysis.evaluation.Evaluator.display_acceptance_region_stats">
+<span class="sig-name descname"><span class="pre">display_acceptance_region_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eval_res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">matplotlib.axes._axes.Axes</span></span></span><a class="headerlink" href="#uplift_analysis.evaluation.Evaluator.display_acceptance_region_stats" title="Permalink to this definition"></a></dt>
+<dd><p>This method provides a visualization of the estimated average response, among certain subgroups of the input
+<code class="docutils literal notranslate"><span class="pre">EvalSet``(s),</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">acceptance</span> <span class="pre">region,</span> <span class="pre">i.e.</span> <span class="pre">where</span> <span class="pre">the</span> <span class="pre">scores</span> <span class="pre">lie</span> <span class="pre">within</span> <span class="pre">some</span> <span class="pre">upper</span> <span class="pre">quantile.</span>
+<span class="pre">According</span> <span class="pre">to</span> <span class="pre">``Evaluator.visualization_methods()</span></code>, this method fits the keyword <code class="docutils literal notranslate"><span class="pre">targeted_region</span></code>.</p>
+<p>In case the provided <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code>s, the visualization will contain, for each of
+the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects, the average response of the observations in which the recommended treatment by the
+model, intersects with the observed treatment, as a function of the upper quantile <em>q</em>, which defines the
+<em>acceptance region</em>. Each curve will be labeled according to its corresponding key on the provided dictionary.
+If <code class="docutils literal notranslate"><span class="pre">average=True</span></code>, the chart will also contain the average performance, computed across the multiple
+<code class="docutils literal notranslate"><span class="pre">EvalSet</span></code>s provided (labeled as <strong>Avg</strong>).</p>
+<p>In case the provided <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> the visualization will contain the following
+curves:</p>
+<ul class="simple">
+<li><p><strong>Intersections</strong> - the average response of the observations in which the recommended treatment by the
+model, intersects with the observed treatment, as a function of the upper quantile <em>q</em>, which defines the
+<em>acceptance region</em>.</p></li>
+<li><p><strong>Untreated</strong> - the average response of the observations associated with the neutral action, as a function
+of the upper quantile <em>q</em>, which defines the <em>acceptance region</em>.</p></li>
+<li><p><strong>Treated</strong> - (relevant in case the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> is associated with multiple actions) regards
+the entire set of non-neutral actions as a single binary action, and describes the average response, where
+intersections are counted accordingly, within the <em>acceptance region</em> defined according to the upper
+quantile <em>q</em>.</p></li>
+<li><p><strong>Unrealized</strong> - (relevant in case the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> is associated with multiple actions) the average response
+among the group of observations in which the recommendations of the model do not intersect with the observed
+actions, within the <em>acceptance region</em> defined according to the upper quantile <em>q</em>.</p></li>
+<li><p><strong>OverallAvgResponse</strong> - describes the average response observed for the entire dataset, disregarding
+score values.</p></li>
+<li><p><strong>UntreatedAvgResponse</strong> - describes the average response among the untreated observations, disregarding
+score values.</p></li>
+<li><p><strong>pVal vs Untreated</strong> - corresponding to the right y-axis, describes the result of applying a statistical
+hypothesis test to the difference between the estimated average response among the <em>Intersections</em> group and
+the <em>Untreated</em> group. In the case of binary response, the statistical test will be a <a class="reference external" href="https://stattrek.com/hypothesis-test/difference-in-proportions.aspx">proportions test</a>, and in the case of a continuous
+response, hypothesis testing will be performed via <a class="reference external" href="https://stattrek.com/hypothesis-test/difference-in-means.aspx?tutorial=AP">t-test</a>.</p></li>
+</ul>
+<p>the curves: <strong>Intersections</strong>, <strong>Untreated</strong>, <strong>Treated</strong>, <strong>Unrealized</strong> will also be accompanied by an
+uncertainty sleeve, describing the confidence interval according to the corredsponding standard error of the
+estimated average responses.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eval_res</strong> (<em>Union</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em>) – The input evaluated dataset(s).</p></li>
+<li><p><strong>num_sets</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>None</em><em>, </em><em>int</em><em>]</em><em>]</em>) – The number of <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects in <code class="docutils literal notranslate"><span class="pre">eval_res</span></code>. If not provided, inferred independently.</p></li>
+<li><p><strong>average</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – A boolean indicating whether to display the average performance as well. Relevant only if <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> is
+a collection (<code class="docutils literal notranslate"><span class="pre">dict</span></code>)  of multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects.</p></li>
+<li><p><strong>title_suffix</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Optional string to add to the title of the chart.</p></li>
+<li><p><strong>random_sets</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>, </em><em>None</em><em>]</em><em>]</em>) – A list of randomly scored <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects, for benchmarking the performance associated with the
+evaluated dataset, if desired. Relevant only if <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object.</p></li>
+<li><p><strong>kwargs</strong> – Arbitrary keyword arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ax</strong> – The axes on which the visualization was created, for further manipulation if required.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Axes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="uplift_analysis.evaluation.Evaluator.display_rejection_region_stats">
+<span class="sig-name descname"><span class="pre">display_rejection_region_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eval_res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">matplotlib.axes._axes.Axes</span></span></span><a class="headerlink" href="#uplift_analysis.evaluation.Evaluator.display_rejection_region_stats" title="Permalink to this definition"></a></dt>
+<dd><p>This method provides a visualization of the estimated average response, among certain subgroups of the input
+<code class="docutils literal notranslate"><span class="pre">EvalSet``(s),</span> <span class="pre">outside</span> <span class="pre">the</span> <span class="pre">*acceptance</span> <span class="pre">region*</span> <span class="pre">(or</span> <span class="pre">inside</span> <span class="pre">the</span> <span class="pre">*rejection</span> <span class="pre">region*),</span> <span class="pre">i.e.</span> <span class="pre">where</span> <span class="pre">the</span> <span class="pre">scores</span> <span class="pre">lie</span>
+<span class="pre">within</span> <span class="pre">some</span> <span class="pre">lower</span> <span class="pre">quantile.</span>
+<span class="pre">According</span> <span class="pre">to</span> <span class="pre">``Evaluator.visualization_methods()</span></code>, this method fits the keyword <code class="docutils literal notranslate"><span class="pre">untargeted_region</span></code>.</p>
+<p>In case the provided <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code>s, the visualization will contain, for each of
+the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects, the average response of the observations associated with the neutral action,
+as a function of the upper quantile <em>q</em>, which defines the <em>rejection region</em>, i.e. the range of scores where
+the recommendations of the model would have been rejected, if <em>q</em> would have been used as the score threhshold.
+Each curve will be labeled according to its corresponding key on the provided dictionary. If <code class="docutils literal notranslate"><span class="pre">average=True</span></code>,
+the chart will also contain the average performance, computed across the multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code>s
+provided (labeled as <strong>Avg</strong>).</p>
+<p>In case the provided <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> the visualization will contain the following
+curves:</p>
+<ul class="simple">
+<li><p><strong>Untreated</strong> - the average response of the observations associated with the neutral action, within the
+lower <em>(1-q)</em> quantiles of the score distribution, i.e. the <em>rejection region</em>.</p></li>
+<li><p><strong>Treated</strong> - the average response of the observations associated with a non-neutral action, within the
+lower <em>(1-q)</em> quantiles of the score distribution, i.e. the <em>rejection region</em>.</p></li>
+<li><p><strong>OverallAvgResponse</strong> - describes the average response observed for the entire dataset, disregarding
+score values.</p></li>
+<li><p><strong>UntreatedAvgResponse</strong> - describes the average response among the untreated observations, disregarding
+score values.</p></li>
+<li><p><strong>pVal vs Untreated</strong> - corresponding to the right y-axis, describes the result of applying a statistical
+hypothesis test to the difference between the estimated average response among the <em>Untreated</em> group and
+the <em>Treated</em> group, in the <em>rejection region</em>. In the case of binary response, the statistical test will
+be a <a class="reference external" href="https://stattrek.com/hypothesis-test/difference-in-proportions.aspx">proportions test</a>, and in the case of a continuous
+response, hypothesis testing will be performed via <a class="reference external" href="https://stattrek.com/hypothesis-test/difference-in-means.aspx?tutorial=AP">t-test</a>.</p></li>
+</ul>
+<p>the curves: <strong>Untreated</strong>, <strong>Treated</strong> will also be accompanied by an uncertainty sleeve, describing the
+confidence interval according to the corredsponding standard error of the estimated average responses.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eval_res</strong> (<em>Union</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em>) – The input evaluated dataset(s).</p></li>
+<li><p><strong>num_sets</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>None</em><em>, </em><em>int</em><em>]</em><em>]</em>) – The number of <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects in <code class="docutils literal notranslate"><span class="pre">eval_res</span></code>. If not provided, inferred independently.</p></li>
+<li><p><strong>average</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – A boolean indicating whether to display the average performance as well. Relevant only if <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> is
+a collection (<code class="docutils literal notranslate"><span class="pre">dict</span></code>)  of multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects.</p></li>
+<li><p><strong>title_suffix</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Optional string to add to the title of the chart.</p></li>
+<li><p><strong>random_sets</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>, </em><em>None</em><em>]</em><em>]</em>) – A list of randomly scored <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects, for benchmarking the performance associated with the
+evaluated dataset, if desired. Relevant only if <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object.</p></li>
+<li><p><strong>kwargs</strong> – Arbitrary keyword arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ax</strong> – The axes on which the visualization was created, for further manipulation if required.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Axes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="uplift_analysis.evaluation.Evaluator.display_agreement_stats">
+<span class="sig-name descname"><span class="pre">display_agreement_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eval_res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">matplotlib.axes._axes.Axes</span></span></span><a class="headerlink" href="#uplift_analysis.evaluation.Evaluator.display_agreement_stats" title="Permalink to this definition"></a></dt>
+<dd><p>This method provides a visualization of the agreements/intersections statistics implied by the input evaluated
+dataset(s), as a function of the score quantile.</p>
+<p>In case the provided <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code>s, the visualization will contain, for each of
+the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects, the rate in which intersections occur, for each <em>acceptance region</em>, which is defined
+according to the upper quantile <em>q</em>. Each curve will be labeled according to its corresponding key on the
+provided dictionary. If <code class="docutils literal notranslate"><span class="pre">average=True</span></code>, the chart will also contain the average performance, computed across
+the multiple``EvalSet``s provided (labeled as <strong>Avg</strong>).</p>
+<p>In case the provided <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> the visualization will contain the following
+curves:</p>
+<ul class="simple">
+<li><p><strong>AgreementRate</strong> - the rate in which intersections occur, for each <em>acceptance region</em>, which is defined
+according to the upper quantile <em>q</em>.</p></li>
+<li><p><strong>Random</strong> - the agreemnt rate curve (just like the <strong>AgreementRate</strong> curve) calculated
+across the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects contained in <code class="docutils literal notranslate"><span class="pre">random_sets</span></code>, if provided.</p></li>
+<li><p><strong>BinaryAgreementRate</strong> - (relevant in case the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> is associated with multiple actions) regards
+the entire set of non-neutral actions as a single binary action, and describes the agreement rate where
+intersections are counted accordingly.</p></li>
+<li><p><strong># of Agreements</strong> - corresponds to the y-axis, displays the absolute number of intersections/agreements,
+w.r.t to each <em>acceptance region</em>, defined according to the upper quantile <em>q</em>.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eval_res</strong> (<em>Union</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em>) – The input evaluated dataset(s).</p></li>
+<li><p><strong>num_sets</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>None</em><em>, </em><em>int</em><em>]</em><em>]</em>) – The number of <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects in <code class="docutils literal notranslate"><span class="pre">eval_res</span></code>. If not provided, inferred independently.</p></li>
+<li><p><strong>average</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – A boolean indicating whether to display the average performance as well. Relevant only if <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> is
+a collection (<code class="docutils literal notranslate"><span class="pre">dict</span></code>)  of multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects.</p></li>
+<li><p><strong>title_suffix</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Optional string to add to the title of the chart.</p></li>
+<li><p><strong>random_sets</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>, </em><em>None</em><em>]</em><em>]</em>) – A list of randomly scored <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects, for benchmarking the performance associated with the
+evaluated dataset, if desired. Relevant only if <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> contains a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object.</p></li>
+<li><p><strong>kwargs</strong> – Arbitrary keyword arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ax</strong> – The axes on which the visualization was created, for further manipulation if required.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Axes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="uplift_analysis.evaluation.Evaluator.get_distribution_by_threshold">
+<span class="sig-name descname"><span class="pre">get_distribution_by_threshold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eval_res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresh</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_suffix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">matplotlib.axes._axes.Axes</span></span></span><a class="headerlink" href="#uplift_analysis.evaluation.Evaluator.get_distribution_by_threshold" title="Permalink to this definition"></a></dt>
+<dd><p>This method provides a visualization of the distribution of recommended treatments, according to a certain
+input score threshold, and with respect to the outputs of the model as they are represented in the input
+<code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object.</p>
+<p>When we consider a certain score threshold, every recommendation of the model that is associated with scores
+higher than the threshold are taken into account, and recommendations associated with lower scores, are
+considered as a recommendation for a neutral action.</p>
+<p>This visualization considers three groups:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Observed</span></code>: The distribution of the observed/actual treatments/actions in the entire dataset (here, the
+threshold has no affect, as this distribution was observed regardless of the scores associated with each
+observation).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Recommended</span></code>: The distribution of the recommendations of the model, where scores lower than the threshold
+are considered as a recommendation for the neutral action.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Intersection</span></code>: The distribution of actions in the intersection set between the observed actions and the
+ones recommended by the model.</p></li>
+</ul>
+<p>The upper chart describes the rate, or fraction, associated with each treatment for each of the groups listed
+above.
+The lower chart describes the absolute number of occurences of each treatment for each of the groups listed
+above.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eval_res</strong> (<em>Union</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em>) – The input evaluated dataset. If provided as a dictionary, must contain only a single entry.</p></li>
+<li><p><strong>thresh</strong> (<em>float</em>) – The score threshold according to which the distribution of recommendations will be visualized.</p></li>
+<li><p><strong>title_suffix</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Optional string to add to the title of the chart.</p></li>
+<li><p><strong>kwargs</strong> – Arbitrary keyword arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ax</strong> – The axes on which the visualization was created, for further manipulation if required.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Axes</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="uplift_analysis.data.html" class="btn btn-neutral float-left" title="uplift_analysis.data module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="uplift_analysis.visualization.html" class="btn btn-neutral float-right" title="uplift_analysis.visualization module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Dvir Ben Or.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

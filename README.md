@@ -21,7 +21,7 @@ This library works for Python 3.7 and higher.
 
 Installation
 ------------
-This library is distributed on [PyPi](missing_url) and can be installed using ``pip``.
+This library is distributed on [PyPi](ttps://pypi.org/project/uplift-analysis) and can be installed using ``pip``.
 <span style="color:red">Still need to take care of this</span>.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -29,14 +29,14 @@ $ pip install uplift-analysis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The command above will automatically install all the required dependencies. Please visit the
-[installation](needs_to_be_fixed) page for more details.
+[installation](https://playtikaresearch.github.io/uplift-analysis/build/html/installation.html) page for more details.
 
 <span style="color:red">Still need to take care of this</span>.
 
 
 Getting started
 ---------------
-Check out the comprehensive [tutorial](broken_link) for a complete walk-through of the library.
+Check out the comprehensive [tutorial](https://playtikaresearch.github.io/uplift-analysis/build/html/tutorials.html) for a complete walk-through of the library.
 <span style="color:red">Still need to take care of this</span>.
 
 ```python
@@ -60,8 +60,8 @@ eval_res, summary = evaluator.eval_and_show(eval_set, specify=['uplift'],
 Documentation
 -------------
 For more information, refer to the accompanying
-[blogpost](broken_link),
-[complete documentation](broken_link), and [tutorial](broken_link).
+blogpost (soon to be published),
+[complete documentation](https://playtikaresearch.github.io/uplift-analysis), and [tutorial](https://playtikaresearch.github.io/uplift-analysis/build/html/tutorials.html).
 
 
 
@@ -84,8 +84,7 @@ $ pip install -r requirements.txt      # install dependencies
 $ pip install -r requirements-dev.txt  # install developer-dependencies
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For creating the "*pip-installable*" ``*.whl`` file, run the following command (at the root of the
-repository):
+For creating the "*pip-installable*" ``*.whl`` file, run the following command (at the root of the repository):
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 $ python -m build
