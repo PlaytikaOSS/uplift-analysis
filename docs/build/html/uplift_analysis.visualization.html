@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>uplift_analysis.visualization module &mdash; uplift-analysis 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="uplift_analysis.utils module" href="uplift_analysis.utils.html" />
+    <link rel="prev" title="uplift_analysis.evaluation module" href="uplift_analysis.evaluation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> uplift-analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">uplift-analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">uplift-analysis Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="uplift_analysis.scoring.html">uplift_analysis.scoring module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="uplift_analysis.data.html">uplift_analysis.data module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="uplift_analysis.evaluation.html">uplift_analysis.evaluation module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">uplift_analysis.visualization module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="uplift_analysis.utils.html">uplift_analysis.utils module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">uplift-analysis</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">uplift-analysis Modules</a> &raquo;</li>
+      <li>uplift_analysis.visualization module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/uplift_analysis.visualization.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="module-uplift_analysis.visualization">
+<span id="uplift-analysis-visualization-module"></span><h1>uplift_analysis.visualization module<a class="headerlink" href="#module-uplift_analysis.visualization" title="Permalink to this headline"></a></h1>
+<p>This module implements functional utilities which are helpful for visualizing the evaluation and analysis results.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="uplift_analysis.visualization.visualize_selection_distribution">
+<span class="sig-prename descclassname"><span class="pre">uplift_analysis.visualization.</span></span><span class="sig-name descname"><span class="pre">visualize_selection_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eval_res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">matplotlib.axes._axes.Axes</span></span></span><a class="headerlink" href="#uplift_analysis.visualization.visualize_selection_distribution" title="Permalink to this definition"></a></dt>
+<dd><p>Implements a utility function for displaying the selection distribution of multiple treatments, inferred according
+to outputs of an evaluated model.
+This visualization describes how selections diverge among the different treatments in a cumulative and gradual
+manner, as we lower the acceptance threshold (w.r.t the scores of the model).
+The x-axis corresponds to the quantile of scores, in a descending manner, where each progression towards the right
+implies including a wider upper quantile. The y-axis corresponds to the number of appearances for each treatment,
+i.e. the number of <em>decisions</em> made by the model to recommend each treatment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eval_res</strong> (<em>Union</em><em>[</em><em>pd.DataFrame</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em>) – The evaluated dataset, whether it is represented by a dataframe or an EvalSet object.</p></li>
+<li><p><strong>column_name</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>str</em><em>, </em><em>None</em><em>]</em><em>]</em>) – The name of the field containing the recommended action according to the evaluated model.
+If not provided, inferred according to the input EvalSet.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The axes in which the visualization is created.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Axes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="uplift_analysis.visualization.chart_display_template">
+<span class="sig-prename descclassname"><span class="pre">uplift_analysis.visualization.</span></span><span class="sig-name descname"><span class="pre">chart_display_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eval_res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_quantile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_quantile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">matplotlib.axes._axes.Axes</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">matplotlib.lines.Line2D</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#uplift_analysis.visualization.chart_display_template" title="Permalink to this definition"></a></dt>
+<dd><p>Implements a utility function called by <code class="docutils literal notranslate"><span class="pre">evaluation.Evaluator</span></code>, for handling the required abstraction
+for plotting signals from multiple/signal <code class="docutils literal notranslate"><span class="pre">data.EvalSet</span></code> objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eval_res</strong> (<em>Union</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em>) – A single <code class="docutils literal notranslate"><span class="pre">data.EvalSet</span></code> object, or a collection of such, containing the signal(s) to be plotted.</p></li>
+<li><p><strong>metric</strong> (<em>str</em>) – The name of the signal. Generally, corresponds to a column on the dataframe hosted in the <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object.</p></li>
+<li><p><strong>func</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>Callable</em><em>, </em><em>None</em><em>]</em><em>]</em>) – In cases where the required signal is not part of the mentioned dataframe, the caller can provide a <code class="docutils literal notranslate"><span class="pre">Callable</span></code>
+which will be responsible for generating a custom <code class="docutils literal notranslate"><span class="pre">pd.Series</span></code>.</p></li>
+<li><p><strong>num_sets</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>None</em><em>, </em><em>int</em><em>]</em><em>]</em>) – The number of <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects the input argument <code class="docutils literal notranslate"><span class="pre">eval_res</span></code> holds.</p></li>
+<li><p><strong>average</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – A boolean indicating whether averaging of the signals is required. Relevant only in case <code class="docutils literal notranslate"><span class="pre">num_sets</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>.</p></li>
+<li><p><strong>min_quantile</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>float</em><em>, </em><em>None</em><em>]</em><em>]</em>) – The quantile from which the quantile-dependent signal(s) will be plotted, for avoiding the noise on the edge
+of the signal.</p></li>
+<li><p><strong>max_quantile</strong> – The quantile up to which the quantile-dependent signal(s) will be plotted, for avoiding the noise on the edge
+of the signal.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>ax</strong> (<em>Axes</em>) – The axes object on which the lines were plotted.</p></li>
+<li><p><strong>lines</strong> (<em>List[Line2D]</em>) – The list of <code class="docutils literal notranslate"><span class="pre">Line2D</span></code> objects plotted by the function, for further editing, if required.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="uplift_analysis.visualization.area_fill">
+<span class="sig-prename descclassname"><span class="pre">uplift_analysis.visualization.</span></span><span class="sig-name descname"><span class="pre">area_fill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">matplotlib.axes._axes.Axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.series.Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#uplift_analysis.visualization.area_fill" title="Permalink to this definition"></a></dt>
+<dd><p>A visualization utility, employed by <code class="docutils literal notranslate"><span class="pre">evaluation.Evaluator</span></code> for filling areas under curves.
+The colors of the fill varies according to some configurable horizontal line, <code class="docutils literal notranslate"><span class="pre">base</span></code>.
+Areas above <code class="docutils literal notranslate"><span class="pre">base</span></code> will be filled with green color, and ares below <code class="docutils literal notranslate"><span class="pre">base</span></code> will be filled with
+red color.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<em>Axes</em>) – The axes object on which the visualization will be appended.</p></li>
+<li><p><strong>s</strong> (<em>pd.Series</em>) – The curve, according to which an area will be filled.</p></li>
+<li><p><strong>base</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em>) – The y-axis value of the horizontal line according to which the area will be colored.</p></li>
+<li><p><strong>kwargs</strong> – Arbitrary keyword arguments, which will be sent to matplotlib backend.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="uplift_analysis.visualization.emphasize_axes">
+<span class="sig-prename descclassname"><span class="pre">uplift_analysis.visualization.</span></span><span class="sig-name descname"><span class="pre">emphasize_axes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">matplotlib.axes._axes.Axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#uplift_analysis.visualization.emphasize_axes" title="Permalink to this definition"></a></dt>
+<dd><p>A visualization utility, employed by <code class="docutils literal notranslate"><span class="pre">evaluation.Evaluator</span></code> for emphasizing axes,
+by plotting bold lines on designated coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<em>Axes</em>) – The axes object on which the visualization will be appended.</p></li>
+<li><p><strong>base</strong> (<em>Tuple</em><em>[</em><em>Union</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em>) – The tuple of values defining the axes, (x_value,y_value).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="uplift_analysis.visualization.plot_points">
+<span class="sig-prename descclassname"><span class="pre">uplift_analysis.visualization.</span></span><span class="sig-name descname"><span class="pre">plot_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">matplotlib.axes._axes.Axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'value'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#uplift_analysis.visualization.plot_points" title="Permalink to this definition"></a></dt>
+<dd><p>A visualization utility, employed by <code class="docutils literal notranslate"><span class="pre">evaluation.Evaluator</span></code> for plotting a set of independet markers,
+labeled by their corresponding values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<em>Axes</em>) – The axes object on which the visualization will be appended.</p></li>
+<li><p><strong>points</strong> (<em>List</em><em>[</em><em>Dict</em><em>]</em>) – A list of dictionaries, containing the points to be plotted. Each dictionary must contain a key <code class="docutils literal notranslate"><span class="pre">point</span></code>, for
+which the corresponding value will be a 2D tuple, containing the coordinates of the point.
+It also  must contain a key corresponding to the argument <code class="docutils literal notranslate"><span class="pre">value_key</span></code>. The value of this key will be used for
+labeling this point.</p></li>
+<li><p><strong>legend_prefix</strong> (<em>str</em>) – The string which will be added to the beginning of the label of each plotted point, followed by the
+corresponding value.</p></li>
+<li><p><strong>value_key</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – The name of the key, in each of the <code class="docutils literal notranslate"><span class="pre">dict</span></code> objects listed under <code class="docutils literal notranslate"><span class="pre">points</span></code>, in which the value of the point
+is stored. This value will be used for labeling the point.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="uplift_analysis.visualization.display_sleeve">
+<span class="sig-prename descclassname"><span class="pre">uplift_analysis.visualization.</span></span><span class="sig-name descname"><span class="pre">display_sleeve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">matplotlib.axes._axes.Axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_set</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">margin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.series.Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_quantile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_quantile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#uplift_analysis.visualization.display_sleeve" title="Permalink to this definition"></a></dt>
+<dd><p>A visualization utility, employed by <code class="docutils literal notranslate"><span class="pre">evaluation.Evaluator</span></code> for displaying an uncertainty sleeve around a
+specified line.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<em>Axes</em>) – The axes object on which the visualization will be appended.</p></li>
+<li><p><strong>eval_set</strong> (<a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a>) – The <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object containing the signal around which the sleeve will be visualized.</p></li>
+<li><p><strong>metric</strong> (<em>str</em>) – The name of the signal, corresponding to the column in the dataframe of the provided <code class="docutils literal notranslate"><span class="pre">eval_set</span></code>. This will
+be the reference signal, around which the sleeve will be visualized.</p></li>
+<li><p><strong>margin</strong> (<em>pd.Series</em>) – The one-sided margin, which will be added, and subtracted from the reference signal, for creating the sleeve.</p></li>
+<li><p><strong>color</strong> (<em>str</em>) – The color of the sleeve.</p></li>
+<li><p><strong>min_quantile</strong> – The quantile from which the quantile-dependent signal(s) will be plotted, for avoiding the noise on the edge
+of the signal.</p></li>
+<li><p><strong>max_quantile</strong> – The quantile up to which the quantile-dependent signal(s) will be plotted, for avoiding the noise on the edge
+of the signal.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="uplift_analysis.visualization.single_curve_plot">
+<span class="sig-prename descclassname"><span class="pre">uplift_analysis.visualization.</span></span><span class="sig-name descname"><span class="pre">single_curve_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pandas.core.series.Series</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">matplotlib.axes._axes.Axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.series.Series</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">matplotlib.lines.Line2D</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#uplift_analysis.visualization.single_curve_plot" title="Permalink to this definition"></a></dt>
+<dd><p>A visualization utility for plotting a single curve, on a given <code class="docutils literal notranslate"><span class="pre">Axes</span></code> object.
+The signal can be an independent <code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code>, but it also can be a column of a <code class="docutils literal notranslate"><span class="pre">pandas.Datframe</span></code>, or a
+result of a function applied to an input <code class="docutils literal notranslate"><span class="pre">pandas.Dataframe</span></code>, for creating a new <code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union</em><em>[</em><em>pd.DataFrame</em><em>, </em><em>pd.Series</em><em>]</em>) – The input data according to which the curve will be plotted.</p></li>
+<li><p><strong>ax</strong> (<em>Axes</em>) – The axes object on which the visualization will be appended.</p></li>
+<li><p><strong>metric</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>str</em><em>, </em><em>None</em><em>]</em><em>]</em>) – The name of the column holding the desired signal, on the input dataframe. Irrelevant when <code class="docutils literal notranslate"><span class="pre">signal</span></code> is a
+<code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code> object.</p></li>
+<li><p><strong>func</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>Callable</em><em>, </em><em>None</em><em>]</em><em>]</em>) – A function to apply on the input dataframe, for generating a new <code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code>. Irrelevant when <code class="docutils literal notranslate"><span class="pre">signal</span></code>
+is a <code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code> object.</p></li>
+<li><p><strong>kwargs</strong> – Arbitrary keyword arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>pd.Series</em> – The series which was eventually plotted by the function.</p></li>
+<li><p><em>Line2D</em> – The plotted line object, for further manipulation.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="uplift_analysis.visualization.chop_lower_quantiles">
+<span class="sig-prename descclassname"><span class="pre">uplift_analysis.visualization.</span></span><span class="sig-name descname"><span class="pre">chop_lower_quantiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.series.Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.series.Series</span></span></span><a class="headerlink" href="#uplift_analysis.visualization.chop_lower_quantiles" title="Permalink to this definition"></a></dt>
+<dd><p>A utility function for filtering out lower quantiles of a given signal, represented as a <code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code>,
+and indexed by quantiles in a descending manner. This is done for avoiding noisy estimations which might
+occur in lower quantiles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>pd.Series</em>) – The original <code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code>, indexed by quantiles in a descending manner.</p></li>
+<li><p><strong>q</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The quantile up to which value of the original series will be filtered out.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The series after filtering out the specified quantiles.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="uplift_analysis.visualization.chop_upper_quantiles">
+<span class="sig-prename descclassname"><span class="pre">uplift_analysis.visualization.</span></span><span class="sig-name descname"><span class="pre">chop_upper_quantiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.series.Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.series.Series</span></span></span><a class="headerlink" href="#uplift_analysis.visualization.chop_upper_quantiles" title="Permalink to this definition"></a></dt>
+<dd><p>A utility function for filtering out upper quantiles of a given signal, represented as a <code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code>,
+and indexed by quantiles in a descending manner. This is done for avoiding noisy estimations which might
+occur in upper quantiles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>pd.Series</em>) – The original <code class="docutils literal notranslate"><span class="pre">pandas.Series</span></code>, indexed by quantiles in a descending manner.</p></li>
+<li><p><strong>q</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The quantile from which value of the original series will be filtered out.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The series after filtering out the specified quantiles.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="uplift_analysis.visualization.get_bin_quantity">
+<span class="sig-prename descclassname"><span class="pre">uplift_analysis.visualization.</span></span><span class="sig-name descname"><span class="pre">get_bin_quantity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.series.Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_bins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bin_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#uplift_analysis.visualization.get_bin_quantity" title="Permalink to this definition"></a></dt>
+<dd><p>A utility function for retrieving the number of bins to use for a density plot or an histogram.
+This number will be based on the number of unique values from which the signal will be composed, and bounded
+from above by a configured maximal value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> (<em>pd.Series</em>) – The series for which a denisty plot is required.</p></li>
+<li><p><strong>max_bins</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – The maximal number of bins to allow, regardless of the number of distinct values.</p></li>
+<li><p><strong>bin_rate</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – The fraction between the number of bins and the number of distinct values in the input series.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The number of bins to use in a denisty plot / histogram.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="uplift_analysis.visualization.should_average">
+<span class="sig-prename descclassname"><span class="pre">uplift_analysis.visualization.</span></span><span class="sig-name descname"><span class="pre">should_average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eval_res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><span class="pre">uplift_analysis.data.EvalSet</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#uplift_analysis.visualization.should_average" title="Permalink to this definition"></a></dt>
+<dd><p>A function for determining the number of <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects in the input <code class="docutils literal notranslate"><span class="pre">eval_res</span></code>, and accordingly determine if
+averaging is required.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eval_res</strong> (<em>Union</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em><em>, </em><a class="reference internal" href="uplift_analysis.data.html#uplift_analysis.data.EvalSet" title="uplift_analysis.data.EvalSet"><em>EvalSet</em></a><em>]</em>) – The input data, which might contain single or multiple <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects.</p></li>
+<li><p><strong>average</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – The upper setting of the demand for averaging.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>average</strong> (<em>bool</em>) – Averaging is required (<code class="docutils literal notranslate"><span class="pre">True</span></code>) only if the input <code class="docutils literal notranslate"><span class="pre">average=True</span></code>, and <code class="docutils literal notranslate"><span class="pre">num_sets</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>.</p></li>
+<li><p><strong>num_sets</strong> (<em>int</em>) – The number of <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects in the input <code class="docutils literal notranslate"><span class="pre">eval_res</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="uplift_analysis.evaluation.html" class="btn btn-neutral float-left" title="uplift_analysis.evaluation module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="uplift_analysis.utils.html" class="btn btn-neutral float-right" title="uplift_analysis.utils module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Dvir Ben Or.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

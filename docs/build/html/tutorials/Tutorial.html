@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Uplift Modeling Analysis &amp; Evaluation - Intro &mdash; uplift-analysis 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="uplift-analysis Modules" href="../modules.html" />
+    <link rel="prev" title="Tutorials" href="../tutorials.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> uplift-analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">uplift-analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Uplift Modeling Analysis &amp; Evaluation - Intro</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Preliminaries">Preliminaries</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Synthetic-Data-Generation">Synthetic Data Generation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Acquiring-Uplift-Scores">Acquiring Uplift Scores</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Scoring">Scoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Evaluation">Evaluation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Representing-Evaluation-Sets-with-EvalSet-objects">Representing Evaluation Sets with <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Performance-Evaluation-Using-Evaluator">Performance Evaluation Using <code class="docutils literal notranslate"><span class="pre">Evaluator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Inspect-Treatment-Assignment">Inspect Treatment Assignment</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Inspect-Operating-Point-Treatment-Assignment-Distribution">Inspect Operating Point Treatment Assignment Distribution</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Visualize-Evaluated-Performance-Using-Evaluator.visualize()">Visualize Evaluated Performance Using <code class="docutils literal notranslate"><span class="pre">Evaluator.visualize()</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Uplift-Curve">Uplift Curve</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Fractional-Lift-Curve">Fractional Lift Curve</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Gain-Curve">Gain Curve</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Expected-Response">Expected Response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Acceptance-and-Rejection-Regions">Acceptance and Rejection Regions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Agreement-Statistics">Agreement Statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Compare-Evaluated-Performance-Between-EvalSets">Compare Evaluated Performance Between <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code>s</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Average-Performance-Across-Multiple-Evaluation-Sets">Average Performance Across Multiple Evaluation Sets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Evaluation-Summaries">Evaluation Summaries</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">uplift-analysis Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../help.html">Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">uplift-analysis</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../tutorials.html">Tutorials</a> &raquo;</li>
+      <li>Uplift Modeling Analysis &amp; Evaluation - Intro</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/Tutorial.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="Uplift-Modeling-Analysis-&amp;-Evaluation---Intro">
+<h1>Uplift Modeling Analysis &amp; Evaluation - Intro<a class="headerlink" href="#Uplift-Modeling-Analysis-&-Evaluation---Intro" title="Permalink to this headline"></a></h1>
+<p>This tutorial demonstrates how the <code class="docutils literal notranslate"><span class="pre">uplift-analysis</span></code> package can be used for analyzing and evaluating uplift models.</p>
+<section id="Preliminaries">
+<h2>Preliminaries<a class="headerlink" href="#Preliminaries" title="Permalink to this headline"></a></h2>
+<p>We’ll start by importing the required libraries:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
+<span class="o">%</span><span class="k">autoreload</span> 2
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The autoreload extension is already loaded. To reload it, use:
+  %reload_ext autoreload
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">rcParams</span>
+<span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;figure.autolayout&#39;</span> <span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="s1">&#39;figure.figsize&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mf">8.5</span><span class="p">],</span>
+                 <span class="s1">&#39;font.size&#39;</span><span class="p">:</span> <span class="mi">17</span><span class="p">})</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span><span class="n">Dict</span><span class="p">,</span><span class="n">Union</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">softmax</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">GradientBoostingRegressor</span><span class="p">,</span> <span class="n">GradientBoostingClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span><span class="p">,</span><span class="n">LogisticRegression</span>
+<span class="kn">from</span> <span class="nn">uplift_analysis</span> <span class="kn">import</span> <span class="n">scoring</span><span class="p">,</span><span class="n">evaluation</span><span class="p">,</span><span class="n">visualization</span><span class="p">,</span><span class="n">data</span>
+</pre></div>
+</div>
+</div>
+<p>Next, we initiate the numpy random generator, and assign some parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">num_treatments</span></code> - the number of possible non-neutral actions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_samples</span></code> - the number of observations composing each of the datasets we’ll use.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">binary_thresh</span></code> - we’ll start by generating some stochastic continous response variable, and use this threshold value for transfroming it into a binary response variable.</p></li>
+</ul>
+<p><em>Note</em>: During this tutorial the term <strong>action</strong> will be used interchangeably with <strong>treatment</strong>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2023</span><span class="p">)</span>
+
+<span class="n">num_treatments</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">num_samples</span> <span class="o">=</span> <span class="mi">100000</span>
+<span class="n">binary_thresh</span> <span class="o">=</span> <span class="mf">5.0</span>
+</pre></div>
+</div>
+</div>
+<section id="Synthetic-Data-Generation">
+<h3>Synthetic Data Generation<a class="headerlink" href="#Synthetic-Data-Generation" title="Permalink to this headline"></a></h3>
+<p>For demonstrating the suggested methodologies, we’ll need some appropriate data. For that purpose, we employ a modified version of the setup suggested in the paper <a class="reference external" href="https://arxiv.org/pdf/1705.08492.pdf">“Uplift Modeling with Multiple Treatments and General Response Types”</a>, by <em>Yan Zhao</em>, <em>Xiao Fang</em> and <em>David Simchi-Levi</em>.</p>
+<p>The schema according to which the synthetic data is generated assumes a <span class="math notranslate nohighlight">\(d\)</span>-dimensional space, and a set of <span class="math notranslate nohighlight">\(T\)</span> treatments (excluding the neutral action or <em>no-action</em> treatment), where <span class="math notranslate nohighlight">\(d &gt; T\)</span>.</p>
+<p>The feature-space is structured as follows:</p>
+<ul class="simple">
+<li><p>The first <span class="math notranslate nohighlight">\(T\)</span> features (out of <span class="math notranslate nohighlight">\(d\)</span> in total), are the features that specify and are responsible for the treatment-dependent effect.</p></li>
+<li><p>The rest of the features, <span class="math notranslate nohighlight">\(x_i\)</span> (<span class="math notranslate nohighlight">\(i=T+1,...,d\)</span>), are uniformly distributed in a range represented as a hyper-cube between <span class="math notranslate nohighlight">\([v_{low},v_{high}]\)</span> for each of these variables. Hence, <span class="math notranslate nohighlight">\(X_i \sim U[v_{low},v_{high}]\)</span>, for <span class="math notranslate nohighlight">\(i=T+1,...,d\)</span>.</p></li>
+<li><p>Correspondingly, and in order to allow a negative treatment effect as well, the first <span class="math notranslate nohighlight">\(T\)</span> features, responsible for the effect associated with each treatment, are distributed in a zero-centered hyper-cube, as follows: <span class="math notranslate nohighlight">\(X_i \sim U[v_{low} - \frac{v_{low} + v_{high}}{2},v_{high} - \frac{v_{low} + v_{high}}{2}]\)</span>, for <span class="math notranslate nohighlight">\(i=1,...,T\)</span> (fixed values of <span class="math notranslate nohighlight">\(v_{low}\)</span> and <span class="math notranslate nohighlight">\(v_{high}\)</span> are used for all <span class="math notranslate nohighlight">\(i\)</span>).</p></li>
+</ul>
+<p><em>Note</em>: On this section, we denote random variables using uppercase letters, and their realizations using lowercase letters.</p>
+<p>Moreover, we consider a continuous response variable, modeled as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+Y = f(X) + E + \epsilon
+\end{align}\]</div>
+<p>Components:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(f(X)\)</span> defines the systematic dependence of the response on the features (regardless of the intervention / treatment). In that case, <span class="math notranslate nohighlight">\(f\)</span> is a mixture of <span class="math notranslate nohighlight">\(d\)</span> exponential functions, defined as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+f(x_1,...,x_d) = \sum_{i=1}^{d} a^i \cdot exp\{-b_1^i |x_1 - c_1^i| - ... - b_d^i |x_d - c_d^i|\}
+\end{align}\]</div>
+<p>where <span class="math notranslate nohighlight">\(a^i\)</span>, <span class="math notranslate nohighlight">\(b_j^i\)</span> and <span class="math notranslate nohighlight">\(c_j^i\)</span> are chosen randomly.</p>
+</li>
+<li><p><span class="math notranslate nohighlight">\(E\)</span> is the treatment effect, and is unique for each treatment <span class="math notranslate nohighlight">\(t = 1,...,T\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+E(X,t)=
+\begin{cases}
+U[0,\alpha X_{t^*}] &amp; \text{for $t=t^*$ and $X_{t^*} &gt; 0$}\\
+U[\alpha X_{t^*},0] &amp; \text{for $t=t^*$ and $X_{t^*} &lt; 0$}\\
+0 &amp; \text{otherwise}\\
+\end{cases}
+\end{align}\end{split}\]</div>
+<p>so that the effect for assigned to an observation if it was assigned with the treatment <span class="math notranslate nohighlight">\(t^*\)</span> is a random value, distributed uniformly between zero and the value of the corresponding attribute <span class="math notranslate nohighlight">\(X_{t^*}\)</span>, multiplied by <span class="math notranslate nohighlight">\(\alpha\)</span> which sets the magnitude of the effect.</p>
+</li>
+<li><p><span class="math notranslate nohighlight">\(\epsilon\)</span> is the zero-mean Gaussian noise, <span class="math notranslate nohighlight">\(\epsilon \sim \mathbb{N}(0,\sigma^2)\)</span>, where the standard deviation <span class="math notranslate nohighlight">\(\sigma\)</span> is identical, regardless of the treatment.</p></li>
+</ul>
+<p>Of course, there are other ways for creating synthetic datasets for the examination of uplift modeling techniques. Refer to this detailed <a class="reference external" href="https://humboldt-wi.github.io/blog/research/applied_predictive_modeling_19/data_generating_process_blogpost/#Theory-behind-the-package">blogpost</a>, by Julian Winkel and Tobias Krebs, for more details.</p>
+<p>Let us implement and wrap the data generation scheme detailed above, with a class named <code class="docutils literal notranslate"><span class="pre">TreatmentEffectDataGenerator</span></code>:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TreatmentEffectDataGenerator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class for generating random treatment effect data, according to a parametric scheme.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    response_func: dict</span>
+<span class="sd">        A dictionary containing the lower and upper boundaries for the random variables `a` and `b`.</span>
+<span class="sd">        It contains the keys `a` and `b`, with corresponding values represented as two-value tuples.</span>
+<span class="sd">    num_treatments: int</span>
+<span class="sd">        The number of non-neutral actions/treatments.</span>
+<span class="sd">    feat_dim: int</span>
+<span class="sd">        The dimension of the feature space.</span>
+<span class="sd">    hypercube_bounds: Tuple</span>
+<span class="sd">        The bounds of the random variables composing the feature space.</span>
+<span class="sd">    effect_magnitude: float</span>
+<span class="sd">        A parameter which will scale the randomized effect, computed according to the relevant features,</span>
+<span class="sd">        for yielding the final effect size for each observation.</span>
+<span class="sd">    noise_var: float</span>
+<span class="sd">        The standard deviation associated with the noise factor.</span>
+<span class="sd">    treat_rate: Union[float,None]</span>
+<span class="sd">        The rate in which treatments (excluding the neutral action) are assigned.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">response_func</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+                 <span class="n">num_treatments</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                 <span class="n">feat_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+                 <span class="n">hypercube_bounds</span><span class="p">:</span> <span class="n">Tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+                 <span class="n">effect_magnitude</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">,</span>
+                 <span class="n">noise_std</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
+                 <span class="n">treat_rate</span><span class="p">:</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span><span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">a_bounds</span> <span class="o">=</span> <span class="n">response_func</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b_bounds</span> <span class="o">=</span> <span class="n">response_func</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span>
+
+        <span class="k">assert</span> <span class="n">feat_dim</span> <span class="o">&gt;</span> <span class="n">num_treatments</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_treatments</span> <span class="o">=</span> <span class="n">num_treatments</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feat_dim</span> <span class="o">=</span> <span class="n">feat_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hypercube_bounds</span> <span class="o">=</span> <span class="n">hypercube_bounds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">effect_magnitude</span> <span class="o">=</span> <span class="n">effect_magnitude</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">noise_std</span> <span class="o">=</span> <span class="n">noise_std</span>
+
+        <span class="k">assert</span> <span class="n">treat_rate</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">treat_rate</span> <span class="o">&lt;</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">treat_rate</span> <span class="o">=</span> <span class="n">treat_rate</span>
+
+
+        <span class="c1"># set the random parameters defining the systematic dependence</span>
+        <span class="c1"># between the response and the feautre space.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">a_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">high</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">a_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                   <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feat_dim</span><span class="p">,))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">b_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">high</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">b_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                   <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feat_dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feat_dim</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hypercube_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                   <span class="n">high</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hypercube_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                   <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feat_dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feat_dim</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The interface method of the class, for generating a sample composed of a desired quantity of</span>
+<span class="sd">        randomized observations, sampled according to the parametric data model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        num_samples: int</span>
+<span class="sd">            The number of observations required.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Dict[str,np.ndarray]</span>
+<span class="sd">            A dictionary holding the following keys: ``feats`` - the feature vector associated with each</span>
+<span class="sd">            observation, ``treatments`` - the randomly assigned treatments, ``f`` - the systematic dependence</span>
+<span class="sd">            between the response variable and the features, ``treatment_effect`` - the random treatment effect</span>
+<span class="sd">            computed and sampled according to the assigned treatment, and ``response``- the resulting response</span>
+<span class="sd">            variable according to the data model, and the sampled factors.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># according to the configured hyper-cube bounds, calculate the center value</span>
+        <span class="n">cube_mid</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hypercube_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">hypercube_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="c1"># for creating the offset bounds of the features responsible for the causal effect:</span>
+        <span class="n">effect_feats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hypercube_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">cube_mid</span><span class="p">,</span>
+                                  <span class="n">high</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hypercube_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">cube_mid</span><span class="p">,</span>
+                                  <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">num_treatments</span><span class="p">))</span>
+        <span class="c1"># the rest of the features are sample according to the prescribed setting</span>
+        <span class="n">other_feats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hypercube_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                  <span class="n">high</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hypercube_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                  <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feat_dim</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_treatments</span><span class="p">))</span>
+        <span class="c1"># then we concatenate both for creating the union feature set</span>
+        <span class="n">feats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">effect_feats</span><span class="p">,</span><span class="n">other_feats</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># assign treatments randomly (zero is also an option - corresponding to no-action / neutral action)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">treat_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># uniform choice</span>
+            <span class="n">treatments_assignment</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_treatments</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                                                  <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">no_action_rate</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">treat_rate</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="p">[</span><span class="n">no_action_rate</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">treat_rate</span> <span class="o">/</span> <span class="n">num_treatments</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_treatments</span>
+            <span class="n">treatments_assignment</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_treatments</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                                                     <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,))</span>
+
+        <span class="c1"># compute systematic dependence</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feat_dim</span><span class="p">):</span>
+            <span class="n">expit</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">feats</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="o">...</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span>
+            <span class="n">f</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">expit</span><span class="p">)</span>
+
+        <span class="c1"># compute and sample treatment effect</span>
+        <span class="n">treatment_effect</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_treatments</span><span class="p">):</span>
+            <span class="n">treatment_indicator</span> <span class="o">=</span> <span class="p">(</span><span class="n">treatments_assignment</span> <span class="o">==</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">treatment_effect</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">effect_magnitude</span> <span class="o">*</span> <span class="n">feats</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">idx</span><span class="p">])</span> <span class="o">*</span> \
+                                <span class="n">treatment_indicator</span>
+        <span class="c1"># sample the noise</span>
+        <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">noise_std</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,))</span>
+
+        <span class="c1"># aggregate all for the final response values</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">f</span> <span class="o">+</span> <span class="n">noise</span> <span class="o">+</span> <span class="n">treatment_effect</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;features&#39;</span><span class="p">:</span> <span class="n">feats</span><span class="p">,</span>
+            <span class="s1">&#39;treatments&#39;</span><span class="p">:</span> <span class="n">treatments_assignment</span><span class="p">,</span>
+            <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="n">f</span><span class="p">,</span>
+            <span class="s1">&#39;treatment_effect&#39;</span><span class="p">:</span> <span class="n">treatment_effect</span><span class="p">,</span>
+            <span class="s1">&#39;response&#39;</span><span class="p">:</span> <span class="n">response</span>
+        <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<p>Now, we can initalize the parameterized synthetic data generator, as follows:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dg</span> <span class="o">=</span> <span class="n">TreatmentEffectDataGenerator</span><span class="p">(</span><span class="n">response_func</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">),</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.0275</span><span class="p">)},</span>
+                                      <span class="n">num_treatments</span><span class="o">=</span><span class="n">num_treatments</span><span class="p">,</span>
+                                      <span class="n">feat_dim</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                                      <span class="n">hypercube_bounds</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+                                      <span class="n">effect_magnitude</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+                                      <span class="n">noise_std</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+                                      <span class="n">treat_rate</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>And use it for creating corresponding train and validation sets:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_set</span> <span class="o">=</span> <span class="n">dg</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">num_samples</span><span class="p">)</span>
+<span class="n">valid_set</span> <span class="o">=</span> <span class="n">dg</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">num_samples</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Each of these sets is represented as dictionary of <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays.</p>
+<p>As noted earlier, our data generation process yields a continuous response variable <span class="math notranslate nohighlight">\(Y\)</span>. Using a suitable threshold value we can create a synthetic binary response variable:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_set</span><span class="p">[</span><span class="s1">&#39;binary_response&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">train_set</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">binary_thresh</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">valid_set</span><span class="p">[</span><span class="s1">&#39;binary_response&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">valid_set</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">binary_thresh</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="A-Brief-Glance">
+<h4>A Brief Glance<a class="headerlink" href="#A-Brief-Glance" title="Permalink to this headline"></a></h4>
+<p>Before moving on, let get a sneak peek at the datasets we created.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># creating dataframes to represent each set</span>
+<span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">train_set</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s1">&#39;features&#39;</span><span class="p">})</span>
+<span class="n">valid_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">valid_set</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s1">&#39;features&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<p>Using these dataframes we can view the treatment assignment distribution (and verify that it matches the configuation according to which we initialized the data generator):</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mf">4.5</span><span class="p">))</span>
+<span class="n">assignments</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;treatments&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">),</span>
+                       <span class="n">valid_df</span><span class="p">[</span><span class="s1">&#39;treatments&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">&#39;validation&#39;</span><span class="p">),</span>
+                       <span class="n">left_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">right_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">assignments</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Treatment Index&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;# of Assignment&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Treatment Assignment Distribution&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial_26_0.png" src="../_images/tutorials_Tutorial_26_0.png" />
+</div>
+</div>
+<p>We can also examine the distribution of the response variable, both overall, and for each treatment sepeartely:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mf">4.5</span><span class="p">))</span>
+<span class="n">palette</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">())</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="s1">&#39;train&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="nb">next</span><span class="p">(</span><span class="n">palette</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">valid_df</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="s1">&#39;validation&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="nb">next</span><span class="p">(</span><span class="n">palette</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Response Variable&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Density&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Response Distribution&#39;</span><span class="p">)</span>
+
+<span class="n">palette</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">())</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mf">4.5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">treat</span><span class="p">,</span> <span class="n">grp</span> <span class="ow">in</span> <span class="n">valid_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;treatments&#39;</span><span class="p">):</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">grp</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s1">&#39;density&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;treatment=</span><span class="si">{</span><span class="n">treat</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="nb">next</span><span class="p">(</span><span class="n">palette</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Response Variable&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Density&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Response Distribution by Action&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial_28_0.png" src="../_images/tutorials_Tutorial_28_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial_28_1.png" src="../_images/tutorials_Tutorial_28_1.png" />
+</div>
+</div>
+<p>The response rate of the <em>binary version</em> (thresholded response) of the reponse can be described as follows:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mf">4.5</span><span class="p">))</span>
+<span class="n">ate</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">train_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;treatments&#39;</span><span class="p">)[</span><span class="s1">&#39;binary_response&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">),</span>
+               <span class="n">valid_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;treatments&#39;</span><span class="p">)[</span><span class="s1">&#39;binary_response&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">&#39;validation&#39;</span><span class="p">),</span>
+               <span class="n">left_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">right_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ate</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Treatment Index&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Binary Response Rate&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Binary Response Rate Across Actions&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial_30_0.png" src="../_images/tutorials_Tutorial_30_0.png" />
+</div>
+</div>
+<p>As demonstrated below, the average treatment effect (<span class="math notranslate nohighlight">\(ATE\)</span>) associated with each treatment, in our syntetic data simulation is of really small magnitude compared to the magnitude and scale of the response:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mf">4.5</span><span class="p">))</span>
+<span class="n">ate</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">train_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;treatments&#39;</span><span class="p">)[</span><span class="s1">&#39;treatment_effect&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">&#39;train&#39;</span><span class="p">),</span>
+               <span class="n">valid_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;treatments&#39;</span><span class="p">)[</span><span class="s1">&#39;treatment_effect&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">&#39;validation&#39;</span><span class="p">),</span>
+               <span class="n">left_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">right_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ate</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Treatment Index&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Average Treatment Effect&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Average Treatments Effects&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial_32_0.png" src="../_images/tutorials_Tutorial_32_0.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="Acquiring-Uplift-Scores">
+<h3>Acquiring Uplift Scores<a class="headerlink" href="#Acquiring-Uplift-Scores" title="Permalink to this headline"></a></h3>
+<p>The domain of <em>Uplift Modeling</em> refers to a collection of methodologies for solving personalized treatment selection problems. In these problems, the model aims to predict the optimal treatment based on given subject characteristics. The general setup includes:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\boldsymbol{X}\)</span>: A set of an observation-level covariates, e.g. medical history records patients.</p></li>
+<li><p><span class="math notranslate nohighlight">\(T\)</span>: The assigned treatment/action/intervention assigned to each observation, e.g. the medication given to each patient, if at all.</p></li>
+<li><p><span class="math notranslate nohighlight">\(y\)</span>: The response variable observed after assigning the treatment <span class="math notranslate nohighlight">\(t \in T\)</span> to context <span class="math notranslate nohighlight">\(\boldsymbol{x} \in \boldsymbol{X}\)</span>, e.g. the health condition of the patient after <span class="math notranslate nohighlight">\(N\)</span> days. We’ll assume higher response value is <em>better</em> (for continuous response variables), and for binary response variables a response of 1 is the desired outcome.</p></li>
+</ul>
+<p>Using the data <span class="math notranslate nohighlight">\((\boldsymbol{X}, T, \boldsymbol{y})\)</span>, an uplift model is trained for creating some kind of <em>policy</em>, a treatment assignment policy, that will use <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span> to assign <span class="math notranslate nohighlight">\(t \in T\)</span>, in order to maximize the value of <span class="math notranslate nohighlight">\(y\)</span>. In some sense, this type of problem puts the <em>uplift modeling</em> under the <em>umbrella</em> of <strong>Causal Inference</strong>. For more information regarding this topic, one can refer to the paper <a class="reference external" href="https://link.springer.com/article/10.1007/s10618-019-00670-y">“A survey and benchmarking study of multitreatment uplift
+modeling”</a>, by Diego Olaya, Kristof Coussement &amp; Wouter Verbeke, as an example - but there are lots of literature resources for more details on this domain.</p>
+<p>Besides the optimal treatment predicted by the uplift model for each observation, one more output of the model is termed the <em>uplift score</em>, which will be denoted as <span class="math notranslate nohighlight">\(\hat{u}_i\)</span>, for the <span class="math notranslate nohighlight">\(i^{th}\)</span> observation. This score is often used to handle the prioritization of treatment assignment; to give high priority to observations that are expected to benefit the most from the suggested treatment, and low priority to observations that are expected to have low benefit (or even a negativee
+effect), w.r.t to the response variable, due to the treatment.</p>
+<p>Often, the <em>uplift score</em> (also known as the <em>uplift signal</em>) the model outputs, is a proxy, or an estimation of the <strong>Conditional Average Treatment Effect</strong> (or <strong>CATE</strong>):</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\tau ( \boldsymbol{t}^{'},\boldsymbol{t}, \boldsymbol{x}) \mathrel{\mathop:} = \mathop{\mathbb{E}} \left[ Y | \boldsymbol{X} = \boldsymbol{x}, \boldsymbol{T} = \boldsymbol{t}^{'}  \right] - \mathop{\mathbb{E}} \left[ Y | \boldsymbol{X} = \boldsymbol{x}, \boldsymbol{T} = \boldsymbol{t}  \right]
+\end{align}\]</div>
+<p>which quantifies how different will be the expected outcome/response for a covariate vector <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span>, under the treatment <span class="math notranslate nohighlight">\(\boldsymbol{t}^{'}\)</span>, compared to another treatment <span class="math notranslate nohighlight">\(\boldsymbol{t}\)</span>. The treatment <span class="math notranslate nohighlight">\(\boldsymbol{t}\)</span> can serve as the reference action, the neutral action, or for indicating no-action at all. The neutral action is denoted as <span class="math notranslate nohighlight">\(t_0\)</span></p>
+<p>As the goal of this tutorial is to demonstrate the <em>evaluation</em> of uplift models, modeling techniques will not be covered here too deeply, and the reader is referred to surveys such as <a class="reference external" href="https://link.springer.com/article/10.1007/s10618-019-00670-y">this paper</a> for more details.</p>
+<p>Instead, we will use quite simple, naive, and not too complex modeling approaches for demonstration purposes. The approaches applied in this tutorial are part of a broader set of techniques for uplift modeling, termed as <strong>Meta-Learners</strong> . A <em>Meta-Learner</em> in the context of uplift modeling, employs possibly multiple <em>base-learners</em>, and combines their outputs for estimating the final <em>CATE</em>. Each base-learner, which can be represetned by any learning algorithm, used supervised learning, for a
+specific prediction task.</p>
+<p>Here are two examples of Meta-learners:</p>
+<ul>
+<li><ins><p><strong>T-Learner</strong></p>
+</ins><p>takes a <em>separate-model</em> approach (also known as <em>SMA</em>), according to which the <em>CATE</em> is estimated by:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\tau ( \boldsymbol{t}^{'},\boldsymbol{t}, \boldsymbol{x}) \mathrel{\mathop:} = \hat{\mu}_{\boldsymbol{t}^{'}}(\boldsymbol{x}) - \hat{\mu}_{\boldsymbol{t}}(\boldsymbol{x})
+\end{align}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\hat{\mu}_{\boldsymbol{t}}(\boldsymbol{x})\)</span> is a model, represented by a base-learner, which is responsible for learning <span class="math notranslate nohighlight">\(\mathop{\mathbb{E}} \left[ Y | \boldsymbol{X} = \boldsymbol{x}, \boldsymbol{T} = \boldsymbol{t} \right]\)</span>, and is exposed, during its training phase, only to observations assigned with the treatment <span class="math notranslate nohighlight">\(\boldsymbol{t}\)</span>. This meta-learner is relatively simplistic, and fail to perform in many scenarios, compared to other advanced meta-learners, such as
+<a class="reference external" href="https://www.pnas.org/content/116/10/4156">X-Learner</a> and <a class="reference external" href="https://arxiv.org/abs/1712.04912">R-Learner</a>.</p>
+</li>
+<li><ins><p><strong>S-Learner</strong></p>
+</ins><p>in which the treatment indicator is included as a feature, similarly to all of the other features, without the indicator being given any special role. Thus, it employs a single model which expects as input also the identity of the action assigned to the observation:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\tau ( \boldsymbol{t}^{'},\boldsymbol{t}, \boldsymbol{x}) \mathrel{\mathop:} = \hat{\mu}(\boldsymbol{x},\boldsymbol{\boldsymbol{t}^{'}}) - \hat{\mu}(\boldsymbol{x},\boldsymbol{\boldsymbol{t}})
+\end{align}\]</div>
+<p>where the base-learner <span class="math notranslate nohighlight">\(\hat{\mu}(\boldsymbol{x},\boldsymbol{\boldsymbol{t}})\)</span> is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\hat{\mu}(\boldsymbol{x},\boldsymbol{\boldsymbol{t}^{*}}) \mathrel{\mathop:} = \mathop{\mathbb{E}} \left[ Y | \boldsymbol{X} = \boldsymbol{x}, \boldsymbol{T} = \boldsymbol{t}^{*}  \right]
+\end{align}\]</div>
+</li>
+</ul>
+<p>Let us apply these concepts for retrieving uplift scores for enabling the evaluation process.</p>
+<p>We will consider:</p>
+<ul class="simple">
+<li><p>A single type of meta-learner: the <em>T-learner</em>.</p></li>
+<li><p>The two types of response variables available in our datasets: binary and continuous.</p></li>
+<li><p>Two possiblities for base-learners: Gradient-Boosting Decision-Tree (<em>GBDT</em>) ensemble, or a simple linear learner (linear regression for the continuous response variable, or logistic regression for the binary response variable).</p></li>
+</ul>
+<section id="T---learner">
+<h4>T - learner<a class="headerlink" href="#T---learner" title="Permalink to this headline"></a></h4>
+<p>As noted above, for the <em>T-learner</em> we train separate models for each treatment, where each model is exposed during training only to observerations that were assigned to a specific treatment.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># accumulate treatment-dependet models for each case:</span>
+<span class="n">t_gbdt_cont_models</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># response: continuous, base-learner: gbdt</span>
+<span class="n">t_linear_cont_models</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># response: continuous, base-learner: linear</span>
+<span class="n">t_gbdt_bin_models</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># response: binary, base-learner: gbdt</span>
+<span class="n">t_linear_bin_models</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># response: binary, base-learner: linear</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Training&#39;</span><span class="p">)</span>
+
+<span class="c1"># for each treatment</span>
+<span class="k">for</span> <span class="n">treat</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_treatments</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)):</span>
+    <span class="c1"># get the subset of observations related to the treatment</span>
+    <span class="n">subset_idx</span> <span class="o">=</span> <span class="n">train_set</span><span class="p">[</span><span class="s1">&#39;treatments&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">treat</span>
+
+    <span class="c1"># train the treatment-dependent response model</span>
+    <span class="n">t_gbdt_cont_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">GradientBoostingRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span> <span class="o">=</span> <span class="n">train_set</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">subset_idx</span><span class="p">],</span>
+                                                                            <span class="n">y</span> <span class="o">=</span> <span class="n">train_set</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="n">subset_idx</span><span class="p">]))</span>
+
+    <span class="n">t_linear_cont_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span> <span class="o">=</span> <span class="n">train_set</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">subset_idx</span><span class="p">],</span>
+                                                       <span class="n">y</span> <span class="o">=</span> <span class="n">train_set</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="n">subset_idx</span><span class="p">]))</span>
+
+    <span class="n">t_gbdt_bin_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">GradientBoostingClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span> <span class="o">=</span> <span class="n">train_set</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">subset_idx</span><span class="p">],</span>
+                                                                            <span class="n">y</span> <span class="o">=</span> <span class="n">train_set</span><span class="p">[</span><span class="s1">&#39;binary_response&#39;</span><span class="p">][</span><span class="n">subset_idx</span><span class="p">]))</span>
+
+    <span class="n">t_linear_bin_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LogisticRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span> <span class="o">=</span> <span class="n">train_set</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">subset_idx</span><span class="p">],</span>
+                                                        <span class="n">y</span> <span class="o">=</span> <span class="n">train_set</span><span class="p">[</span><span class="s1">&#39;binary_response&#39;</span><span class="p">][</span><span class="n">subset_idx</span><span class="p">]))</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Training
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 5/5 [00:27&lt;00:00,  5.50s/it]
+</pre></div></div>
+</div>
+<p>Using the trained models, we retrieve the estimations of the response variable, associated with each treatment, and stack them as numpy arrays, which will be included in the dictionary representing our validation set (each model will have a dedicated key):</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># accumulate treatment-dependet estimations for each case:</span>
+<span class="n">t_gbdt_cont_outputs</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># response: continuous, base-learner: gbdt</span>
+<span class="n">t_linear_cont_outputs</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># response: continuous, base-learner: linear</span>
+<span class="n">t_gbdt_bin_outputs</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># response: binary, base-learner: gbdt</span>
+<span class="n">t_linear_bin_outputs</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># response: binary, base-learner: linear</span>
+
+<span class="c1"># for each treatment</span>
+<span class="k">for</span> <span class="n">treat</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_treatments</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)):</span>
+    <span class="c1"># apply the treatment-dependent response model on the entire dataset</span>
+    <span class="n">t_gbdt_cont_outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t_gbdt_cont_models</span><span class="p">[</span><span class="n">treat</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">valid_set</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">]))</span>
+    <span class="n">t_linear_cont_outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t_linear_cont_models</span><span class="p">[</span><span class="n">treat</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">valid_set</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">]))</span>
+
+    <span class="c1"># in the case of binary response - `predict()` is replaced with `predict_proba()`</span>
+    <span class="n">t_gbdt_bin_outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t_gbdt_bin_models</span><span class="p">[</span><span class="n">treat</span><span class="p">]</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">valid_set</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">])[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">t_linear_bin_outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t_linear_bin_models</span><span class="p">[</span><span class="n">treat</span><span class="p">]</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">valid_set</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">])[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">valid_set</span><span class="p">[</span><span class="s1">&#39;t_learner_gbdt_cont&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">t_gbdt_cont_outputs</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">valid_set</span><span class="p">[</span><span class="s1">&#39;t_learner_linear_cont&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">t_linear_cont_outputs</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">valid_set</span><span class="p">[</span><span class="s1">&#39;t_learner_gbdt_bin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">t_gbdt_bin_outputs</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">valid_set</span><span class="p">[</span><span class="s1">&#39;t_learner_linear_bin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">t_linear_bin_outputs</span><span class="p">,</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 5/5 [00:00&lt;00:00,  8.96it/s]
+</pre></div></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+<section id="Scoring">
+<h1>Scoring<a class="headerlink" href="#Scoring" title="Permalink to this headline"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">uplift-analysis.scoring</span></code> is a module that implements the class <code class="docutils literal notranslate"><span class="pre">Scorer</span></code>. The <code class="docutils literal notranslate"><span class="pre">Scorer</span></code> class is used for abstracting the procedure of uplift score computation, in case it is not provided directly by the model (just like in <em>T-learner</em> or <em>S-learner</em>). It can be used for scoring a gived dataset, according to a provided configuration (or a set of configurations). Each configuration, should specify the relevant fields according to which the score is computed, and the function to apply to
+these fields. <em>Note</em>: using the <code class="docutils literal notranslate"><span class="pre">Scorer</span></code> is optional, and it is not obligatory for the rest of the evaluation procedure. It is only used to facilitate the scoring phase.</p>
+<p>We’ll start by scoring only a single model - the binary response <em>T-learner</em> using <em>GBDT</em> as a base-learner:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t_gbdt_bin_scorer</span> <span class="o">=</span> <span class="n">scoring</span><span class="o">.</span><span class="n">Scorer</span><span class="p">({</span>
+    <span class="s1">&#39;scoring_func&#39;</span><span class="p">:</span> <span class="s1">&#39;binary_score_calc&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;t_gbdt_bin&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;scoring_field&#39;</span><span class="p">:</span> <span class="s1">&#39;t_learner_gbdt_bin&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;reference_field&#39;</span><span class="p">:</span> <span class="s1">&#39;t_learner_gbdt_bin&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;reference_idx&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">scoring_func</span></code> key represent the <code class="docutils literal notranslate"><span class="pre">Callable</span></code> object defining the functionality applied for computing the score. It can be either one of the scoring functions implemented as part of the scorer: <code class="docutils literal notranslate"><span class="pre">binary_score_calc</span></code>,<code class="docutils literal notranslate"><span class="pre">sigmoid_frac_score_calc</span></code>, <code class="docutils literal notranslate"><span class="pre">cont_score_calc</span></code>, <code class="docutils literal notranslate"><span class="pre">identity_score_calc</span></code>, or any other user-defined function (for configuring one of the pre-defined function, one can specify the associated function name as a string). In addition, <code class="docutils literal notranslate"><span class="pre">scoring_field</span></code> specifies the field
+according to which the scoring is performed, and the <code class="docutils literal notranslate"><span class="pre">reference_field</span></code>, and <code class="docutils literal notranslate"><span class="pre">reference_idx</span></code> specifies the field and the column index used for inferring the base/reference response estimated, if it is required for computing the scores.</p>
+<p>Then, applying the scorer for calculating the scores:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ranking</span><span class="p">,</span> <span class="n">recommended_action</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span> <span class="n">action_dim</span> <span class="o">=</span> <span class="n">t_gbdt_bin_scorer</span><span class="o">.</span><span class="n">calculate_scores</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">valid_set</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>we get:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ranking</span></code>: The relative rank <span class="math notranslate nohighlight">\(\in (0,1]\)</span> associated with each observation in the dataset w.r.t to the uplift score, where the highest rank corresponds to the highest score.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">recommended_action</span></code>: The serial index of the action associated with the highest uplift score, for each observation - inferred as the recommended treatment by the model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">score</span></code>: The computed uplift score, for each observation, according to the provided configuration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">action_dim</span></code>: The quantity of actions (action space cardinality) taken into account during scoring (including the neutral/no-action).</p></li>
+</ul>
+</section>
+<section id="Evaluation">
+<h1>Evaluation<a class="headerlink" href="#Evaluation" title="Permalink to this headline"></a></h1>
+<p>An uplift model can be considered as a dynamic and continuous policy <span class="math notranslate nohighlight">\(\pi(\boldsymbol{x},q)\)</span>. <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span> represents the context / the featre vector associated with an observation, <span class="math notranslate nohighlight">\(q\)</span> can be treated as the rate of exposure of the model’s recommendations (further elaboration to follow), and <span class="math notranslate nohighlight">\(\pi\)</span> is a function of both which outputs the actual action - whether or not to assign a treatment to the observation, and which treatment it will be. Usually the considered
+treatments are associated with some cost, and in most of the cases assigning treatments (that are not the neutral action) to the entire population is not feasible. Moreover, some of the observations might be associated with negative effects as a result of a/the treatment.</p>
+<p>As noted the uplift score is used to serve as a proxy measure for the positive effect estimated and associated with a specific treatment. Hence, higher uplift scores imply higher magnitude (more positive) effect on the response variable.</p>
+<p>Hence, the variable <span class="math notranslate nohighlight">\(q\)</span>, controlling <span class="math notranslate nohighlight">\(\pi(\boldsymbol{x},q)\)</span>, corresponds to the <em>exposure rate</em> of the recommendations of the model, in terms of score quantiles. It means, that the upper <span class="math notranslate nohighlight">\(q\)</span> quantiles of the scores are exposed to the recommendations of the model, and the rest of the population, associated with lower scores, are not exposed to the recommendations, and get the default/netural/no-action treatment, noted from now on as <span class="math notranslate nohighlight">\(t_0\)</span>.</p>
+<p>Therefore, each upper quantile <span class="math notranslate nohighlight">\(q=q^{*} \in (0,1)\)</span>, can also be interpreted by a corresponding threshold, given the distribution of uplift scores, <span class="math notranslate nohighlight">\(\boldsymbol{\hat{u}}\)</span>, observed among the validation set. The corresponding threshold is defined as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+Thresh(q^{*},\boldsymbol{\hat{u}})=p_{q^{*}}, \hspace{0.5cm} \text{for} \hspace{0.5cm} \frac{1}{N} \sum_{i=1}^{N} \mathbb{1} \left[ \hat{u}_i \geq p_{q^{*}} \right] = q^{*}
+\end{align}\]</div>
+<p>where <span class="math notranslate nohighlight">\(N\)</span> denotes the number of observations in the evaluated dataset, and <span class="math notranslate nohighlight">\(\mathbb{1}\)</span> denotes the indicator function.</p>
+<p>Accordingly, for each value of <span class="math notranslate nohighlight">\(q=q^{*} \in (0,1)\)</span>, the dynamic policy <span class="math notranslate nohighlight">\(\pi(\boldsymbol{x},q)\)</span> is fixed as <span class="math notranslate nohighlight">\(\pi(\boldsymbol{x},q^{*}) = h_{q^{*}}(x)\)</span>, which is mapping from the feature space to the space of treatments, i.e. <span class="math notranslate nohighlight">\(h(\cdot) : \mathbb{X}^d \rightarrow \{t_0,t_1,...,t_T \}\)</span>. Each fixed mapping <span class="math notranslate nohighlight">\(h_{q^{*}}(x)\)</span> assigns the treatments recommended by the model to observations associated with high uplifts scores, or more precisely to observations associated with
+uplift scores that are in the upper <span class="math notranslate nohighlight">\(q^{th}\)</span> quantile of the score distribution (those with <span class="math notranslate nohighlight">\(\hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}})\)</span>), and assigns the neutral action to the rest of the distribution (where <span class="math notranslate nohighlight">\(\hat{u}_i &lt; Thresh(q^{*},\boldsymbol{\hat{u}})\)</span>).</p>
+<p>Each value of <span class="math notranslate nohighlight">\(q=q^{*} \in (0,1)\)</span>, and the corresponding <span class="math notranslate nohighlight">\(h_{q^{*}}(x)\)</span> and <span class="math notranslate nohighlight">\(Thresh(q^{*},\boldsymbol{\hat{u}})\)</span>, define what will be termed as the <em>acceptance region</em> - the range of scores, <span class="math notranslate nohighlight">\(\hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}})\)</span> , in which the model (or the resulting <em>policy</em>) aims to assign a treatment (non-neutral action, action different than <span class="math notranslate nohighlight">\(t_0\)</span>), and the complement <em>rejection region</em> - the range of scores,
+<span class="math notranslate nohighlight">\(\hat{u}_i &lt; Thresh(q^{*},\boldsymbol{\hat{u}})\)</span>, where the model will assign the neutral treatment <span class="math notranslate nohighlight">\(t_0\)</span>.</p>
+<section id="Representing-Evaluation-Sets-with-EvalSet-objects">
+<h2>Representing Evaluation Sets with <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects<a class="headerlink" href="#Representing-Evaluation-Sets-with-EvalSet-objects" title="Permalink to this headline"></a></h2>
+<p>Equipped with this terminlogoy, we will create a corresponding <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object (implemented in <code class="docutils literal notranslate"><span class="pre">uplift_analysis.data</span></code>). <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> is a dataclass used to represente a dataset object, going through the uplift evaluation procedure, together with the corresponding meta-data. For creating, a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> is required, along with the specification of the following:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">observed_action_field</span></code>: The name associated with the field / column containing the actual action assigned for each observation in the evaluated set.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">response_field</span></code>: The name associated with the field / column containing the observed response for each observation in the evaluated set.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">score_field</span></code>: The name associated with the field / column containing the output score for each observation in the evaluated set.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">proposed_action_field</span></code>: The name associated with the field / column containing the recommended action by the model, for each observation in the evaluated set.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">control_indicator</span></code>: The action value associated with the neutral action.</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scored_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;recommended_action&#39;</span><span class="p">:</span> <span class="n">recommended_action</span><span class="p">,</span>
+    <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="n">score</span><span class="p">,</span>
+    <span class="s1">&#39;observed_action&#39;</span><span class="p">:</span> <span class="n">valid_set</span><span class="p">[</span><span class="s1">&#39;treatments&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;response&#39;</span><span class="p">:</span> <span class="n">valid_set</span><span class="p">[</span><span class="s1">&#39;binary_response&#39;</span><span class="p">],</span>
+    <span class="p">})</span>
+
+<span class="n">eval_set</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">EvalSet</span><span class="p">(</span>
+    <span class="n">df</span><span class="o">=</span><span class="n">scored_df</span><span class="p">,</span>
+    <span class="n">observed_action_field</span><span class="o">=</span><span class="s1">&#39;observed_action&#39;</span><span class="p">,</span>
+    <span class="n">response_field</span><span class="o">=</span><span class="s1">&#39;response&#39;</span><span class="p">,</span>
+    <span class="n">score_field</span><span class="o">=</span><span class="s1">&#39;score&#39;</span><span class="p">,</span>
+    <span class="n">proposed_action_field</span><span class="o">=</span><span class="s1">&#39;recommended_action&#39;</span><span class="p">,</span>
+    <span class="n">control_indicator</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Performance-Evaluation-Using-Evaluator">
+<h2>Performance Evaluation Using <code class="docutils literal notranslate"><span class="pre">Evaluator</span></code><a class="headerlink" href="#Performance-Evaluation-Using-Evaluator" title="Permalink to this headline"></a></h2>
+<p>For performing the evaluation procedure of the dataset represented as an <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object, we employ an <code class="docutils literal notranslate"><span class="pre">Evaluator</span></code> object (implemented under <code class="docutils literal notranslate"><span class="pre">uplift_analysis.evaluation</span></code>).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">evaluation</span><span class="o">.</span><span class="n">Evaluator</span><span class="p">()</span>
+<span class="n">eval_res</span><span class="p">,</span><span class="n">summary</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">evaluate_set</span><span class="p">(</span><span class="n">eval_set</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>As a result of the evaluation, we get:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">eval_res</span></code>: The resulting <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> on which the evaluation was performed.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">summary</span></code>: A gross statistics summary of the evaluation process (the values contained in this summary will be elaborated <a class="reference external" href="#Evaluation-Summaries">later in this tutorial</a>).</p></li>
+</ul>
+</section>
+<section id="Inspect-Treatment-Assignment">
+<h2>Inspect Treatment Assignment<a class="headerlink" href="#Inspect-Treatment-Assignment" title="Permalink to this headline"></a></h2>
+<p>Before visualizing the evaluated performance, it can be very useful to examine how the treatments are distributed according to the model. It can easily expose tendencies of the model to prefer a specific treatment, or a region of the score distribution, in which other treatments are preferred by the model. Insights such as these can expose other pitfalls or strengths of the model. For describing the assignment of treatments and their distribution, we show the cumulative sum of assignments for
+each treatment, as the accepatance-region is expanded, and the score threshold goes lower.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">visualization</span><span class="o">.</span><span class="n">visualize_selection_distribution</span><span class="p">(</span><span class="n">eval_res</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial_63_0.png" src="../_images/tutorials_Tutorial_63_0.png" />
+</div>
+</div>
+<p>In the case of the dataset we generated, there should not be any preference towards a specific treatment, thus the assignment rate is quite similar across all the treatments. However, in real-life scenarios, preferences of the model will be easily observed in a similar chart.</p>
+<section id="Inspect-Operating-Point-Treatment-Assignment-Distribution">
+<h3>Inspect Operating Point Treatment Assignment Distribution<a class="headerlink" href="#Inspect-Operating-Point-Treatment-Assignment-Distribution" title="Permalink to this headline"></a></h3>
+<p>In practice, when an uplift model is deployed for treatment assignment on new observations, the score threshold <span class="math notranslate nohighlight">\(p_{q^{*}}\)</span> should also be specified. The threshold defines the bounds of the acceptance region w.r.t uplift score. In inference, the acceptance region cannot be defined using the specification of the upper quantile <span class="math notranslate nohighlight">\(q=q^{*} \in (0,1)\)</span>. As opposed to the <em>offline</em> evaluation of the validation dataset, in the phase of inference, we won’t necessarily be exposed to a
+distribution of samples; possibly only to a single instance (in streaming use-cases), for which the model will need to decide, whether to apply the recommendation of the model or not. Thus, in practice, a score threshold, inferred according to the observed distribution of uplift scores would be used. Thresholding and bounding the acceptance region of model recommendations, might be required due to multiple reasons. Two prominent reasons could be i) budget limitations which prohibit the
+assignment of treatments (which impose some cost) to the entire population, or ii) a negative effect on the response due to the treatment for specific segments of the population (termed in the literature as “<em>sleeping dogs</em>”).</p>
+<p>The selected threshold applied to new instances, as part of the deployment of the model, is termed as the <em>operating point</em>. Inspecting the assignment distribution under the chosen <em>operating point</em> can also be useful:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_distribution_by_threshold</span><span class="p">(</span><span class="n">eval_set</span><span class="p">,</span><span class="n">thresh</span><span class="o">=</span><span class="mf">0.015</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial_68_0.png" src="../_images/tutorials_Tutorial_68_0.png" />
+</div>
+</div>
+<p>These charts describe the distribution of assigned treatments among three different groups:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Observed</span></code>: The actual treatments assigned to the observations composing the evaluated dataset. This distribution is not affected by the choice of the specific threshold.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Recommended</span></code>: The distribution of the recommendations of the the policy <span class="math notranslate nohighlight">\(\pi(\boldsymbol{x},q^{*}) = h_{q^{*}}(x)\)</span> corresponding to the selected threshold.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Intersection</span></code>: The distribution of actions in the intersection set between the observed actions and the ones recommended by the model, i.e where the recommendation of the model <span class="math notranslate nohighlight">\(h_{q^{*}}(x)\)</span> goes hand-in-hand with the observed treatment.</p></li>
+</ul>
+<p>The upper subplot describes the density distribution, and the lower describes the distribution in absolute quantities. Thus, the bars associated with the <code class="docutils literal notranslate"><span class="pre">Intersection</span></code> group, on the lower chart (absolute quantities) will always be lower (or equal)in height than the <code class="docutils literal notranslate"><span class="pre">Recommended</span></code> group. As explained and demonstrated later in this tutorial, much of the evaluted performance measure relies on the statistics of the <em>Intersections</em> set. Therefore, it is important to verify that the distribution
+of assignments in the <em>Intersections</em> set is not significantly different from the “hypothetical” distribution of assignments (<code class="docutils literal notranslate"><span class="pre">Recommended</span></code>). If that is not the case, and the distributions are very different, we won’t be able to “project” the performance we evaluated (based on the intersection set), and expect similar performance when the model will be deployed, and act on(assign treatments to) new instances.</p>
+</section>
+</section>
+<section id="Visualize-Evaluated-Performance-Using-Evaluator.visualize()">
+<h2>Visualize Evaluated Performance Using <code class="docutils literal notranslate"><span class="pre">Evaluator.visualize()</span></code><a class="headerlink" href="#Visualize-Evaluated-Performance-Using-Evaluator.visualize()" title="Permalink to this headline"></a></h2>
+<p>Now, we can use the <code class="docutils literal notranslate"><span class="pre">evaluator</span></code> for visualizing the results of the evaluation, using the method <code class="docutils literal notranslate"><span class="pre">Evaluator.visualize()</span></code>.</p>
+<ins><p><em>Note</em></p>
+</ins><p>: A dedicated method, <code class="docutils literal notranslate"><span class="pre">Evaluator.eval_and_show()</span></code>, can be used for combining the steps of <em>evaluation</em> and <em>visualization</em> with a single call.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Evaluator</span></code> class provides a set of charts for the visualization of the evaluated performance, listed under:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">evaluator</span><span class="o">.</span><span class="n">visualization_methods</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;uplift&#39;,
+ &#39;fractional_lift&#39;,
+ &#39;gain&#39;,
+ &#39;avg_response&#39;,
+ &#39;acceptance_region&#39;,
+ &#39;rejection_region&#39;,
+ &#39;agreements&#39;,
+ &#39;score_distribution&#39;]
+</pre></div></div>
+</div>
+<p>All the charts listed above, except for <code class="docutils literal notranslate"><span class="pre">score_distribution</span></code>, share the same <em>x-axis</em>. As explained earlier, the performance of the uplift model is a function of the exposure rate, expressed by <span class="math notranslate nohighlight">\(q=q^{*} \in (0,1)\)</span>, which denotes the upper <span class="math notranslate nohighlight">\(q^{th}\)</span> quantile of scores according to which observations (with scores in this range) will be exposed to the treatments recommended by the model. Accordingly, each signal/measure depcited in these charts is a function of the upper <span class="math notranslate nohighlight">\(q^{th}\)</span>
+quantile, and as we move from the left side of the chart towards the right, the <em>acceptance-region</em> gets wider, observations with lower scores enter the <em>acceptance-region</em>, and the performance, or the values of the specific metric depicted, might change. Of course, as the <em>acceptance-region</em> grows wider, and <span class="math notranslate nohighlight">\(q\)</span> grows bigger, the <em>rejection-region</em> shrinks accordingly (as it complements the acceptance-region). As an auxiliary notation, we denote the observed treatment assignment for
+the <span class="math notranslate nohighlight">\(i^{th}\)</span> observation as <span class="math notranslate nohighlight">\(t^{(i)}\)</span>.</p>
+<p>The created charts yield different visualizations, dependening on:</p>
+<ul class="simple">
+<li><p>whether the evaluated set is associated with multiple treatments or just a single binary treatment.</p></li>
+<li><p>whether the associated response is represented by a binary variable or a contrinuous variable.</p></li>
+<li><p>whether they are created for a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object, or a collection of such (as will be demonstrated later in this tutorial).</p></li>
+</ul>
+<p>Moreover, in the case of calling <code class="docutils literal notranslate"><span class="pre">Evaluator.visualize()</span></code> with a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object, the user can set the keyword argument <code class="docutils literal notranslate"><span class="pre">show_random</span></code> and <code class="docutils literal notranslate"><span class="pre">num_random_rep</span></code> for benchmarking the depicted measure/metric relative to the average of the same metric over a collection of corresponding <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> objects that were randomly scored.</p>
+<p>When calling <code class="docutils literal notranslate"><span class="pre">Evaluator.visualize()</span></code> all these charts will be provided, one after the other. However, the user can use the keyword argument <code class="docutils literal notranslate"><span class="pre">specify</span></code>, for <em>specifying</em> the list of charts desired. For explaining the content depicted in each chart, we’ll use this option, to show each chart separately.</p>
+<p>Let us start with the first chart:</p>
+<section id="Uplift-Curve">
+<h3>Uplift Curve<a class="headerlink" href="#Uplift-Curve" title="Permalink to this headline"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">evaluator</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">eval_res</span><span class="p">,</span><span class="n">show_random</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">num_random_rep</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">specify</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;uplift&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial_81_0.png" src="../_images/tutorials_Tutorial_81_0.png" />
+</div>
+</div>
+<p>This chart describes several curves, but the primary one is the one labeled as <code class="docutils literal notranslate"><span class="pre">Intersection</span> <span class="pre">Uplift</span></code>, quantifying the <strong>differnce</strong>, within the <em>acceptance region</em> defined according to <span class="math notranslate nohighlight">\(q^{*}\)</span>, between :</p>
+<ul>
+<li><p>the <strong>average response</strong> for the group of observations for which the observed actions intersect with the treatments recommended by the model, i.e. <span class="math notranslate nohighlight">\(\mathop{\mathbb{E}} \left[ y_i | \hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \hspace{0.2cm},\hspace{0.2cm} h_{q^{*}}(x^{(i)}) = t^{(i)}\right]\)</span>, which is estimated as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\frac{\sum_{i} y_i \mathbb{1} \left[\hat{u}_i &gt; Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[h_{q^{*}}(x^{(i)}) = t^{(i)} \right]}{\sum_{i} \mathbb{1} \left[\hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[h_{q^{*}}(x^{(i)}) = t^{(i)} \right]}
+\end{align}\]</div>
+</li>
+<li><p>the <strong>average response</strong> for the group of observations which were assigned with the neutral action <span class="math notranslate nohighlight">\(t_0\)</span>, i.e. <span class="math notranslate nohighlight">\(\mathop{\mathbb{E}} \left[ y_i | \hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \hspace{0.2cm},\hspace{0.2cm} t^{(i)} = t_0 \right]\)</span>, which is estimated as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\frac{\sum_{i} y_i \mathbb{1} \left[\hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[t^{(i)} = t_0 \right]}{\sum_{i} \mathbb{1} \left[\hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[t^{(i)} = t_0 \right]}
+\end{align}\]</div>
+</li>
+</ul>
+<p>As long as this uplift curve is positive, it implies higher average response for the intersection group, compared to the untreated group, within the acceptance region. The left edge on the curve describes the difference when a very small fraction of the score distribution is exposed to the decisions of the model, and the right edge describes a scenario in which the entire population is exposed to the recommendation.</p>
+<p>The label attached to the curve also indicates the area under the curve which is often used as an aggregate performance metric. The area under the curve is also color-filled (green will be the fill color for positive values, and red for negative ones).</p>
+<p>The curve labeled as <code class="docutils literal notranslate"><span class="pre">Random</span></code> depicts the average uplift curve computed for <code class="docutils literal notranslate"><span class="pre">num_random_rep</span></code> randomly scored evaluation sets, and can be used as a benchmark for understanding whether the performance observed in our primary evaluated set is coincidential or not.</p>
+<p>Although analyzing uplift models usually regards response statistics calculated <em>inside</em> the acceptance region, we also need to consider the perfromance of the uplift model in the <em>rejection region</em> - i.e. what are the implications of the policy <span class="math notranslate nohighlight">\(h_{q^{*}}\)</span> intending to assign the neutral treatment <span class="math notranslate nohighlight">\(t_0\)</span> for observations with <span class="math notranslate nohighlight">\(\hat{u}_i &lt; Thresh(q^{*},\boldsymbol{\hat{u}})\)</span>. To answer that, the curve labeled as <code class="docutils literal notranslate"><span class="pre">UnexposedResponseDiff</span></code>, depicts for each <span class="math notranslate nohighlight">\(q^{*}\)</span>, the
+difference, in the rejection region between:</p>
+<ul class="simple">
+<li><p>the <strong>average response</strong> for the untreated group of observations, i.e. <span class="math notranslate nohighlight">\(\mathop{\mathbb{E}} \left[ y_i | \hat{u}_i &lt; Thresh(q^{*},\boldsymbol{\hat{u}}) \hspace{0.2cm},\hspace{0.2cm} t^{(i)} = t_0\right]\)</span>, which is estimated by:
+<span class="math notranslate nohighlight">\(\frac{\sum_{i} y_i \mathbb{1} \left[\hat{u}_i &lt; Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[t^{(i)} = t_0 \right]}{\sum_{i} \mathbb{1} \left[\hat{u}_i &lt; Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[t^{(i)} = t_0 \right]}\)</span>.</p></li>
+<li><p>the <strong>average response</strong> for the treated (with a non-neutral treatment) group of observations, i.e. <span class="math notranslate nohighlight">\(\mathop{\mathbb{E}} \left[ y_i | \hat{u}_i &lt; Thresh(q^{*},\boldsymbol{\hat{u}}) \hspace{0.2cm},\hspace{0.2cm} t^{(i)} \neq t_0\right]\)</span>, which is estimated by:
+<span class="math notranslate nohighlight">\(\frac{\sum_{i} y_i \mathbb{1} \left[\hat{u}_i &lt; Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[t^{(i)} \neq t_0 \right]}{\sum_{i} \mathbb{1} \left[\hat{u}_i &lt; Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[t^{(i)} \neq t_0 \right]}\)</span>.</p></li>
+</ul>
+<p>Accordingly, as the values of <code class="docutils literal notranslate"><span class="pre">UnexposedResponseDiff</span></code>, for a certain <span class="math notranslate nohighlight">\(q^{*}\)</span>, are positive it implies the associated average response for the untreated group is higher than the treated one, when considering only observations with scores lower than <span class="math notranslate nohighlight">\(Thresh(q^{*},\boldsymbol{\hat{u}})\)</span>. But, when <code class="docutils literal notranslate"><span class="pre">UnexposedResponseDiff</span> <span class="pre">&lt;</span> <span class="pre">0</span></code>, it means that even among the lower uplift scores, the average response is higher for the treated instances, and that the model will “<em>lose</em>”, w.r.t response
+statistics in this region, by abstaining from treating instances in this region.</p>
+<p>The dashed black line in this chart, corresponds to the <em>right y-axis</em>, and it quantifies the fraction of the treated observations (<span class="math notranslate nohighlight">\(t^{(i)} \neq t_0\)</span>) in general, that can be found inside the acceptance region, for each <span class="math notranslate nohighlight">\(q^{*}\)</span>. Thus, it must always start from zero (where the acceptance region width is negligible), to one (where the acceptance region is spread over the entire distribution of scores). When this line goes up, from zero to one, in a linear fashion, it implies that the
+uplift scores for the treated group, is distributed similar to the entire population. On the other hand, if this line goes up in a non-linear fashion, it implies that the distribution of scores associated with the treated group is different - e.g. if uplift scores for treated instances are higher (in general) than the scores of the non-treated ones, it might indicate a leakage of information related to the treatment assignment into the model, which should output the scores regardless of the
+observed treatment that was assigned. In addition, it might indicate that the assignment of treatments during the controlled randomized experiment, is not necessarily completely random, and that observations with certain characteristics (expressed by their covariates) tend to get treated more often. This aspect of controlling our randomized data collection process is also crucial, for our ability to draw conclusions from the evaluation.</p>
+<p>As we can see in the chart above, there are two more curves that are worth inspecting: <code class="docutils literal notranslate"><span class="pre">Treated</span> <span class="pre">Uplift</span></code> and <code class="docutils literal notranslate"><span class="pre">Realized</span> <span class="pre">Vs</span> <span class="pre">Unrealized</span></code>. Both of these curves are relevant only in case the evaluated set is associated with multiple actions. When the treatment is binary (a single non-neutral action), both of these curves will be identical to the <code class="docutils literal notranslate"><span class="pre">Intersection</span> <span class="pre">Uplift</span></code> curve, and they will not be displayed because they do not add any information.</p>
+<p><strong>``Treated Uplift``</strong> describes a scenario in which all the non-netural actions, <span class="math notranslate nohighlight">\(t \neq t_0\)</span>, are treated as a single treatment, and quanitifies the associated uplift, i.e. <span class="math notranslate nohighlight">\(\mathop{\mathbb{E}} \left[ y_i | \hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \hspace{0.2cm},\hspace{0.2cm} t^{(i)} \neq t_0\right] - \mathop{\mathbb{E}} \left[ y_i | \hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \hspace{0.2cm},\hspace{0.2cm} t^{(i)} = t_0\right]\)</span>, which is estimated by:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\frac{\sum_{i} y_i \mathbb{1} \left[\hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[t^{(i)} \neq t_0 \right]}{\sum_{i} \mathbb{1} \left[\hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[t^{(i)} \neq t_0 \right]} - \frac{\sum_{i} y_i \mathbb{1} \left[\hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[t^{(i)} = t_0 \right]}{\sum_{i} \mathbb{1} \left[\hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[t^{(i)} = t_0 \right]}
+\end{align}\]</div>
+<p>The gap, or the difference between this curve and the <code class="docutils literal notranslate"><span class="pre">Intersection</span> <span class="pre">Uplift</span></code> curve, in the multiple actions scenario, can be used to justify (or de-justify) the need in treating each treatment separately, instead of an approach in which the model is used to map which instances to treat, and the treatments are chosen randomly for these instances. As the gap between the curves grows bigger (for the benefit of the <code class="docutils literal notranslate"><span class="pre">Intersection</span> <span class="pre">Uplift</span></code> curve), the advantage of using a multi-treatment approach is
+more prominent.</p>
+<p><strong>``Realized Vs Unrealized Uplift``</strong> describes the difference in average response between the intersection set - where the recommendation of the model matches the observed action assigned, and the complement set - where the recommended action by the model is different from the one assigned during the collection of the data. It means that the curve represents the difference:
+<span class="math notranslate nohighlight">\(\mathop{\mathbb{E}} \left[ y_i | \hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \hspace{0.2cm},\hspace{0.2cm} h_{q^{*}}(x^{(i)}) = t^{(i)} \right] - \mathop{\mathbb{E}} \left[ y_i | \hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \hspace{0.2cm},\hspace{0.2cm} h_{q^{*}}(x^{(i)}) \neq t^{(i)} \right]\)</span> estimated by:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\frac{\sum_{i} y_i \mathbb{1} \left[\hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[h_{q^{*}}(x^{(i)}) = t^{(i)} \right]}{\sum_{i} \mathbb{1} \left[\hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[h_{q^{*}}(x^{(i)}) = t^{(i)} \right]} - \frac{\sum_{i} y_i \mathbb{1} \left[\hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[h_{q^{*}}(x^{(i)}) \neq t^{(i)} \right]}{\sum_{i} \mathbb{1} \left[\hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[h_{q^{*}}(x^{(i)}) \neq t^{(i)} \right]}
+\end{align}\]</div>
+<p>Such difference can also be used to assess the benefit in learning the optimal treatment to assign to each instance, over the naive approach according to which all treatments are just considered as a <em>single treatment</em>.</p>
+</section>
+<section id="Fractional-Lift-Curve">
+<h3>Fractional Lift Curve<a class="headerlink" href="#Fractional-Lift-Curve" title="Permalink to this headline"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">evaluator</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">eval_res</span><span class="p">,</span><span class="n">show_random</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">num_random_rep</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">specify</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fractional_lift&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial_92_0.png" src="../_images/tutorials_Tutorial_92_0.png" />
+</div>
+</div>
+<p>In some use-cases, especially these in which the response variable is continuous, telling the difference in average response between groups might not be enough. In such cases, telling the percentage increase in average response in one group compared to another can be more useful. The <strong>fractional lift</strong> chart provides visualization of average response ratios, which reflect the percentage increase/decrease associated with treatment assignment (or the avoidance of which). This chart replaces the
+difference/substraction opeartion used for the calculation of the curves depicted in the <a class="reference external" href="#Uplift-Curve">uplift chart</a>, and computes the ratio of average responses between the same “<em>confronted</em>” sections. For a detailed explanation of the quantities used to compute every curve in this chart, refer to the explanation for the <a class="reference external" href="#Uplift-Curve">uplift chart</a>.</p>
+</section>
+<section id="Gain-Curve">
+<h3>Gain Curve<a class="headerlink" href="#Gain-Curve" title="Permalink to this headline"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">evaluator</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">eval_res</span><span class="p">,</span><span class="n">show_random</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">num_random_rep</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">specify</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;gain&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial_95_0.png" src="../_images/tutorials_Tutorial_95_0.png" />
+</div>
+</div>
+<p>In the <code class="docutils literal notranslate"><span class="pre">uplift-analysis</span></code> framework, we use the term <code class="docutils literal notranslate"><span class="pre">gain</span></code>, to describe the absolute quantitative result / benefit implied by the calculated uplift for the evaluated set. It can be interpreted differently in the case of a binary response variable, or a continuous one. Assuming the estimate of the uplift signal is reliable, and for the evaluated set we have <span class="math notranslate nohighlight">\(N_{t_0}(q^{*})\)</span> untreated instances falling inside the acceptance region (defined by
+<span class="math notranslate nohighlight">\(\hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}})\)</span>). If we were to apply the uplift model using the threshold <span class="math notranslate nohighlight">\(Thresh(q^{*},\boldsymbol{\hat{u}})\)</span> on the same specific evaluated set, the question will be:</p>
+<ul class="simple">
+<li><p>In the case of a binary response variable: how many instances can we expect to change their response from <span class="math notranslate nohighlight">\(0\)</span> to <span class="math notranslate nohighlight">\(1\)</span>?</p></li>
+<li><p>In the case of a continuous variable: what will be the total increase in the response for these <span class="math notranslate nohighlight">\(N_{t_0}(q^{*})\)</span> instances, if they were exposed to the recommendations of the model?</p></li>
+</ul>
+<p>For calculating this we multiply the uplift signal (estimated and shown in the <a class="reference external" href="#Uplift-Curve">uplift chart</a>) by the quantity of untreated instances, for each <span class="math notranslate nohighlight">\(q^{*}\)</span>, and the corresponding threshold <span class="math notranslate nohighlight">\(Thresh(q^{*},\boldsymbol{\hat{u}}) = p_{q^{*}}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+Gain(q^{*}) =
+\end{align}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\left( \frac{\sum_{i} y_i \mathbb{1} \left[\hat{u}_i &gt; p_{q^{*}} \right] \cdot \mathbb{1} \left[h_{q^{*}}(x^{(i)}) = t^{(i)} \right]}{\sum_{i} \mathbb{1} \left[\hat{u}_i \geq p_{q^{*}} \right] \cdot \mathbb{1} \left[h_{q^{*}}(x^{(i)}) = t^{(i)} \right]} - \frac{\sum_{i} y_i \mathbb{1} \left[\hat{u}_i \geq p_{q^{*}} \right] \cdot \mathbb{1} \left[t^{(i)} = t_0 \right]}{\sum_{i} \mathbb{1} \left[\hat{u}_i \geq p_{q^{*}} \right] \cdot \mathbb{1} \left[t^{(i)} = t_0 \right]} \right) \cdot
+\left(\sum_{i} \mathbb{1} \left[\hat{u}_i \geq p_{q^{*}} \right] \cdot  \mathbb{1} \left[t^{(i)} = t_0 \right] \right)=
+\end{align}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+Uplift(q^{*})\cdot N_{t_0}(q^{*})
+\end{align}\]</div>
+<p>Although in the specific chart shown above, the depicted curve seems to rise almost for the entire range of <span class="math notranslate nohighlight">\(q^{*}\)</span>, in practice this curve might be shaped differently in other scenarios. For example, if the uplift curve is descending, but positive, as a function of <span class="math notranslate nohighlight">\(q^{*}\)</span>, then although <span class="math notranslate nohighlight">\(N_{t_0}(q^{*})\)</span> is monotonically increasing w.r.t <span class="math notranslate nohighlight">\(q^{*}\)</span>, the decrease in the uplift signal might shape the gain curve as a bell-shaped curve. Here comes in to the picture the choice
+of the <a class="reference external" href="#Inspect-Operating-Point-Treatment-Assignment-Distribution">operating point</a>. One might want to set the operating point, with a threshold that corresponds to the maximal gain. Thus, this chart highlights the maximal gain point with a marker, labeled with the corresponding score threshold value, in order to facilitate the choice of operating point.</p>
+<p>As for the previous charts, the curve labeled as <code class="docutils literal notranslate"><span class="pre">Random</span></code> depicts the average gain curve computed for <code class="docutils literal notranslate"><span class="pre">num_random_rep</span></code> randomly scored evaluation sets, and can be used as a benchmark for understanding whether the performance observed in our primary evaluated set is coincidential or not.</p>
+<p>Another curve displayed in this chart is labeled as <code class="docutils literal notranslate"><span class="pre">Treated</span> <span class="pre">Gain</span></code>. It is relevant only in the case where the evaluated set is associated with multiple treatments. It is used to describe and quantify the gain associated with a scenario in which all the non-neutral actions, <span class="math notranslate nohighlight">\(t \neq t_0\)</span>, are treated as a single treatment. Just like in the <a class="reference external" href="#Uplift-Curve">uplift chart</a>, the gap between <code class="docutils literal notranslate"><span class="pre">Intersection</span> <span class="pre">Gain</span></code> and <code class="docutils literal notranslate"><span class="pre">Treated</span> <span class="pre">Gain</span></code>, can emphasize the need in considering each treatment
+separately. The maximal point for this gain curve is also highlighted and labeled with the corresponding score threshold value.</p>
+</section>
+<section id="Expected-Response">
+<h3>Expected Response<a class="headerlink" href="#Expected-Response" title="Permalink to this headline"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">evaluator</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">eval_res</span><span class="p">,</span><span class="n">show_random</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">num_random_rep</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">specify</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;avg_response&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial_102_0.png" src="../_images/tutorials_Tutorial_102_0.png" />
+</div>
+</div>
+<p>Although the analysis of uplift models focuses primarily on statistics computed inside the acceptance region, what we would like to achieve eventually is a model (and a corresponding operating point) which will maximize the expected value of the response for the entire population. For doing so, we assume that the distribution of uplift scores and response values observed in the evaluated set, provides a good representation and reflection of the distribution the model will meet upon deployment.
+In such a case, the expected response can be seen as a weighted average between two factors:</p>
+<ul class="simple">
+<li><p>the <strong>average response</strong> for the group of observations for which the observed actions intersect with the treatments recommended by the model, in the acceptance region: <span class="math notranslate nohighlight">\(\frac{\sum_{i} y_i \mathbb{1} \left[\hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[h_{q^{*}}(x^{(i)}) = t^{(i)} \right]}{\sum_{i} \mathbb{1} \left[\hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[h_{q^{*}}(x^{(i)}) = t^{(i)} \right]}\)</span>. This curve is
+labeled as <code class="docutils literal notranslate"><span class="pre">AvgResponseIntersectedTreatments</span></code>.</p></li>
+<li><p>the <strong>average response</strong> for the untreated group of observations,which fall in the rejection region: <span class="math notranslate nohighlight">\(\frac{\sum_{i} y_i \mathbb{1} \left[\hat{u}_i &lt; Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[t^{(i)} = t_0 \right]}{\sum_{i} \mathbb{1} \left[\hat{u}_i &lt; Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[t^{(i)} = t_0 \right]}\)</span>. This curve is labeled as <code class="docutils literal notranslate"><span class="pre">AvgResponseUntreated</span></code>.</p></li>
+</ul>
+<p>As can be seen in the chart, both of these curves are bounded by uncertainty sleeves. These sleeves represent a <span class="math notranslate nohighlight">\(95\%\)</span> confidence interval associated with the standard error of either the mean estimator (when the response variable is continuous), or the proportion estimator (when the response variable is binary).</p>
+<p>For estimating the expected response associated with the operating point <span class="math notranslate nohighlight">\(q^{*}\)</span>, we weigh these two curves by the following:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+q^{*} \cdot AvgResponseIntersectedTreatments(q^{*}) + \left( 1-q^{*} \right) \cdot AvgResponseUntreated(q^{*})
+\end{align}\]</div>
+<p>As this curve takes into account an aggregation of the performance of the model across the entire distribution of scores, and just like the <a class="reference external" href="#Gain-Curve">gain curve</a>, it might not (and it probably won’t) be monotonically increasing, it can also be used for setting the optimal <a class="reference external" href="#Inspect-Operating-Point-Treatment-Assignment-Distribution">operating point</a>.</p>
+<p>For benchmarking purposes, this chart also displays:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TreatedExpectedResponse</span></code> - The same logic applied for the computation of <code class="docutils literal notranslate"><span class="pre">IntersectionExpectedResponse</span></code>, but when all the non-neutral treatments are considered as a single treatment.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Random</span></code> - The same logic as in <code class="docutils literal notranslate"><span class="pre">IntersectionExpectedResponse</span></code>, applied to a set of randomly scored evaluation sets, and then averaged.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">OverallAvgResponse</span></code> - The average response observed across the entire evaluation set (fixed value, not affected by a specific choice of operating point).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">UntreatedAvgResponse</span></code> - The average response observed across the untreated observations in the evaluation set (fixed value, not affected by a specific choice of operating point).</p></li>
+</ul>
+</section>
+<section id="Acceptance-and-Rejection-Regions">
+<h3>Acceptance and Rejection Regions<a class="headerlink" href="#Acceptance-and-Rejection-Regions" title="Permalink to this headline"></a></h3>
+<p>Recall that the uplift signals depicted in the <a class="reference external" href="#Uplift-Curve">uplift chart</a> are subtractions of mean/proportion estimators of the response in the acceptance region. Therefore it could be useful to examine these source signals directly.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">evaluator</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">eval_res</span><span class="p">,</span><span class="n">show_random</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">num_random_rep</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">specify</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;acceptance_region&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial_109_0.png" src="../_images/tutorials_Tutorial_109_0.png" />
+</div>
+</div>
+<p>In this chart we can see a few mean/proportion estimate signals, as a function of <span class="math notranslate nohighlight">\(q^{*}\)</span>, all of which are computed for observations with <span class="math notranslate nohighlight">\(\hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}})\)</span>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Intersections</span></code>: where <span class="math notranslate nohighlight">\(h_{q^{*}}(x^{(i)}) = t^{(i)}\)</span>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Untreated</span></code>: where <span class="math notranslate nohighlight">\(t^{(i)} = t_0\)</span>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Treated</span></code>: where <span class="math notranslate nohighlight">\(t^{(i)} \neq t_0\)</span> (relevant only in multiple actions scenario).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Unrealized</span></code>: where <span class="math notranslate nohighlight">\(t^{(i)} \neq h_{q^{*}}(x^{(i)})\)</span> (relevant only in multiple actions scenario).</p></li>
+</ul>
+<p>Because all these signals, for a certain <span class="math notranslate nohighlight">\(q^{*}\)</span>, are estimators of mean response / response proportion (depending on the type of response variable), all of them are accompanied by an uncertainty sleeve, depicting a <span class="math notranslate nohighlight">\(95\%\)</span> confidence interval associated with the corresponding standard error. As we move along the curves towards the right side of the chart, the acceptance region goes wider, and these curves (mean/proportion estimators) include more observations for computing the
+statistics, the uncertainty decreases, and the sleeves go narrower.</p>
+<p>In addition, this chart depicts the result of a statistical hypothesis test for the difference in average response between the <code class="docutils literal notranslate"><span class="pre">Intersections</span></code> group and the <code class="docutils literal notranslate"><span class="pre">Untreated</span></code> group. The null hypothesis used for this test is that the average response for the two groups is equal, and the alternative hypothesis is that it is different (a two-tailed test). When the response variable is continuous a <a class="reference external" href="https://stattrek.com/hypothesis-test/difference-in-means.aspx?tutorial=AP">t-test</a> is used for
+testing the difference in means, and when the response variable is binary a <a class="reference external" href="https://stattrek.com/hypothesis-test/difference-in-proportions.aspx">proportion test</a> is used. As a result of the test performed for each <span class="math notranslate nohighlight">\(q^{*}\)</span>, we get a corresponding <code class="docutils literal notranslate"><span class="pre">p-value</span></code>, which quantifies the probability that similar findings will be found in case the null hypothesis is true. The <code class="docutils literal notranslate"><span class="pre">p-value</span></code> associated with each <span class="math notranslate nohighlight">\(q^{*}\)</span> is depicted and associated with the right <em>y-axis</em> ; as it goes lower it
+implies that the difference between the estimators is more significant.</p>
+<p>Again, just as in the <a class="reference external" href="#Expected-Response">Expected Response chart</a>, the values of <code class="docutils literal notranslate"><span class="pre">OverallAvgResponse</span></code> and <code class="docutils literal notranslate"><span class="pre">UntreatedAvgResponse</span></code> are shown as a reference for comparison as well.</p>
+<p>For the complete picture, one can also examine the estimators of average response in the rejection region:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">evaluator</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">eval_res</span><span class="p">,</span><span class="n">show_random</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">num_random_rep</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">specify</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;rejection_region&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial_114_0.png" src="../_images/tutorials_Tutorial_114_0.png" />
+</div>
+</div>
+<p>In this chart we can see two mean/proportion estimate signals, as a function of <span class="math notranslate nohighlight">\(q^{*}\)</span>, both of which are computed for observations, in the rejection region, with <span class="math notranslate nohighlight">\(\hat{u}_i &lt; Thresh(q^{*},\boldsymbol{\hat{u}})\)</span>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Untreated</span></code>: where <span class="math notranslate nohighlight">\(t^{(i)} = t_0\)</span>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Treated</span></code>: where <span class="math notranslate nohighlight">\(t^{(i)} \neq t_0\)</span>.</p></li>
+</ul>
+<p>As opposed to the previous chart, here the uncertainty sleeves get wider as we consider a higher value of <span class="math notranslate nohighlight">\(q^{*}\)</span>, because a higher value of <span class="math notranslate nohighlight">\(q^{*}\)</span> implies a narrower rejection region, so these estimates end up relying on less observations.</p>
+<p>Similarly to the previous chart, a statistical hypothesis test is applied for testing the difference in average response between the groups mentioned above, and its outcomes, the p-values, are shown (corresponding to right <em>y-axis</em>).</p>
+</section>
+<section id="Agreement-Statistics">
+<h3>Agreement Statistics<a class="headerlink" href="#Agreement-Statistics" title="Permalink to this headline"></a></h3>
+<p>As explained earlier, our ability to <em>interpolate</em> the observed tuples structured as <span class="math notranslate nohighlight">\((context, treatment, response)\)</span>, and estimate the response for an unseen combination of <span class="math notranslate nohighlight">\(context\)</span> and <span class="math notranslate nohighlight">\(treatment\)</span>, depends, among the rest, on the controlled randomization in the data collection phase. The evaluated performance shown on the previous chart, relies heavily on the instances for which the recommendation of the model <em>matches</em> the assigned treatment during the data collection
+phase. If these intersections occur in significantly different rates along the distribution of uplift scores, it might imply that:</p>
+<ul class="simple">
+<li><p>The assignment of treatments was not completely random - some information, that is also contained in the covariates the model is exposed to, affected the probability of treatment assignment per instance.</p></li>
+<li><p>Or that some leakage of treatment-assignment-related information finds its way, through the covariates, to the model, and affects the distribution of uplift scores for the treated group.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">evaluator</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">eval_res</span><span class="p">,</span><span class="n">show_random</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">num_random_rep</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">specify</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;agreements&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial_120_0.png" src="../_images/tutorials_Tutorial_120_0.png" />
+</div>
+</div>
+<p>This chart depicts <code class="docutils literal notranslate"><span class="pre">AgreementRate</span></code>, which shows the rate in which these agreements / intersections occur, as a function of acceptance region width (controlled by <span class="math notranslate nohighlight">\(q^{*}\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\frac{1}{N_{q^{*}}} \sum_{i} \mathbb{1} \left[\hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[ h_{q^{*}}(x^{(i)}) = t^{(i)} \right]
+\end{align}\]</div>
+<p>where <span class="math notranslate nohighlight">\(N_{q^{*}}\)</span> denotes the total quantity of observations in the acceptance region. In the displayed curve, the rate seems to be almost perfectly uniform w.r.t to <span class="math notranslate nohighlight">\(q^{*}\)</span> (except for the noise in the narrow acceptance region, associated with smaller <span class="math notranslate nohighlight">\(q^{*}\)</span> values). In the scenario brought here in the tutorial, the generated data is synthetic, and the simulated treatment assignment can be easily randomized, but in practice, this will not always be the case, and this figure
+can be used to point out imperfections in the randomization of treatment assignment. Also displayed in the chart is the curve labeled as <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">of</span> <span class="pre">Agreements</span></code> which is the cumulative count of agreements found as <span class="math notranslate nohighlight">\(q^{*}\)</span> grows bigger. Non-linear growth in this monotonically increasing curve might also imply the same leakage or imperfect randomization mentioned above.</p>
+<p>As a benchmark, one can also refer to the curves:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Random</span></code>: The average agreement rate observed across (possibly multiple) randomly scored evaluation sets.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BinaryAgreementRate</span></code>: The agreement rate computed where the set of non-neutral treatments (<span class="math notranslate nohighlight">\(t^{(i)} \neq t_0\)</span>), are treated as a single treatment:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\frac{1}{N_{q^{*}}} \sum_{i} \mathbb{1} \left[\hat{u}_i \geq Thresh(q^{*},\boldsymbol{\hat{u}}) \right] \cdot \mathbb{1} \left[ t^{(i)} \neq t_0 \right]
+\end{align}\]</div>
+<p>It will be displayed only in case the evaluated set is associated with multiple treatments.</p>
+</li>
+</ul>
+</section>
+</section>
+<section id="Compare-Evaluated-Performance-Between-EvalSets">
+<h2>Compare Evaluated Performance Between <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code>s<a class="headerlink" href="#Compare-Evaluated-Performance-Between-EvalSets" title="Permalink to this headline"></a></h2>
+<p>The visualizations shown above do provide a lot of performance-related information. However, it visualizes the performance for a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object. In practice, we may want to compare the performance of multiple experiments at once. For demonstration, let us create a dictionary of evaluation sets, corresponding to the <em>T-learner</em> models associated with the continuous response variable:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">compare_eval_sets</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># will contain the two evaluation sets</span>
+
+<span class="k">for</span> <span class="n">model_name</span><span class="p">,</span><span class="n">field_name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;t_gbdt&#39;</span><span class="p">,</span><span class="s1">&#39;t_linear&#39;</span><span class="p">],[</span><span class="s1">&#39;t_learner_gbdt_cont&#39;</span><span class="p">,</span><span class="s1">&#39;t_learner_linear_cont&#39;</span><span class="p">]):</span>
+    <span class="c1"># create `Scorer` object</span>
+    <span class="n">scorer</span> <span class="o">=</span> <span class="n">scoring</span><span class="o">.</span><span class="n">Scorer</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">model_name</span><span class="p">,</span>
+                             <span class="s1">&#39;scoring_field&#39;</span><span class="p">:</span> <span class="n">field_name</span><span class="p">,</span>
+                             <span class="s1">&#39;reference_field&#39;</span><span class="p">:</span> <span class="n">field_name</span><span class="p">,</span>
+                             <span class="s1">&#39;reference_idx&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                             <span class="s1">&#39;scoring_func&#39;</span><span class="p">:</span> <span class="s1">&#39;cont_score_calc&#39;</span><span class="p">})</span>
+
+
+    <span class="n">ranking</span><span class="p">,</span> <span class="n">recommended_action</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span> <span class="n">action_dim</span> <span class="o">=</span> <span class="n">scorer</span><span class="o">.</span><span class="n">calculate_scores</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">valid_set</span><span class="p">)</span>
+    <span class="n">scored_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;recommended_action&#39;</span><span class="p">:</span> <span class="n">recommended_action</span><span class="p">,</span>
+                <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="n">score</span><span class="p">,</span>
+                <span class="s1">&#39;observed_action&#39;</span><span class="p">:</span> <span class="n">valid_set</span><span class="p">[</span><span class="s1">&#39;treatments&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;response&#39;</span><span class="p">:</span> <span class="n">valid_set</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+    <span class="n">compare_eval_sets</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">EvalSet</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">scored_df</span><span class="p">,</span>
+                                   <span class="n">name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span>
+                                   <span class="n">observed_action_field</span><span class="o">=</span><span class="s1">&#39;observed_action&#39;</span><span class="p">,</span>
+                                   <span class="n">response_field</span><span class="o">=</span><span class="s1">&#39;response&#39;</span><span class="p">,</span>
+                                   <span class="n">score_field</span><span class="o">=</span><span class="s1">&#39;score&#39;</span><span class="p">,</span>
+                                   <span class="n">proposed_action_field</span><span class="o">=</span><span class="s1">&#39;recommended_action&#39;</span><span class="p">,</span>
+                                   <span class="n">control_indicator</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<ins><p>Notes:</p>
+</ins><ul class="simple">
+<li><p>In this demonstration the evaluation sets we compare represent different models applied to the same dataset. However, there is no such restriction, and we can use the following comparison flow, for evaluation sets representing different datasets, if it makes sense. For example, we might want to inspect the performance of a single model, applied to different datasets, which can be associated with different population segments, or different time periods.</p></li>
+<li><p>There is no limitation on number of evaluation sets to compare.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">evaluator</span> <span class="o">=</span> <span class="n">evaluation</span><span class="o">.</span><span class="n">Evaluator</span><span class="p">()</span>
+<span class="n">compare_eval_sets</span><span class="p">,</span> <span class="n">summary</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">eval_and_show</span><span class="p">(</span><span class="n">compare_eval_sets</span><span class="p">,</span><span class="n">specify</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;uplift&#39;</span><span class="p">,</span><span class="s1">&#39;gain&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial_127_0.png" src="../_images/tutorials_Tutorial_127_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial_127_1.png" src="../_images/tutorials_Tutorial_127_1.png" />
+</div>
+</div>
+<p>Using the charts we can observe the evaluated performance associated with each of the evaluation sets contained in <code class="docutils literal notranslate"><span class="pre">compare_eval_sets</span></code>. As opposed to evaluation and visualization of a single <code class="docutils literal notranslate"><span class="pre">EvalSet</span></code> object, when multiple sets are considered, only a single curve is dedicated for each evaluation set, in each chart. These will be:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="#Uplift-Curve">Uplift chart</a>: <code class="docutils literal notranslate"><span class="pre">Intersection</span> <span class="pre">Uplift</span></code>.</p></li>
+<li><p><a class="reference external" href="#Fractional-Lift-Curve">Fractional lift chart</a>: <code class="docutils literal notranslate"><span class="pre">Fractional</span> <span class="pre">Uplift</span></code>.</p></li>
+<li><p><a class="reference external" href="#Gain-Curve">Gain chart</a>: <code class="docutils literal notranslate"><span class="pre">Intersection</span> <span class="pre">Gain</span></code>.</p></li>
+<li><p><a class="reference external" href="#Expected-Response">Expected response chart</a>: <code class="docutils literal notranslate"><span class="pre">IntersectionExpectedResponse</span></code>.</p></li>
+<li><p><a class="reference external" href="#Acceptance-and-Rejection-Regions">Acceptance and Rejection regions charts</a>: <code class="docutils literal notranslate"><span class="pre">Intersections</span></code>.</p></li>
+<li><p><a class="reference external" href="#Agreement-Statistics">Agreement statistics chart</a>: <code class="docutils literal notranslate"><span class="pre">AgreementRate</span></code>.</p></li>
+</ul>
+</section>
+<section id="Average-Performance-Across-Multiple-Evaluation-Sets">
+<h2>Average Performance Across Multiple Evaluation Sets<a class="headerlink" href="#Average-Performance-Across-Multiple-Evaluation-Sets" title="Permalink to this headline"></a></h2>
+<p>In some cases, we might want to inspect the average performance across multiple evaluation sets. For example, the multiple evaluation sets might represent different random seeds associated either with the data generation process or with the base models composing the meta-learner.</p>
+<p>For this demonstration let us train <em>T-learners</em> trained and evaluated on new randomized datasets (each time using a different random seed), and average the performance across the corresponding evaluation sets:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">random_seeds</span> <span class="o">=</span> <span class="p">[</span><span class="mi">111</span><span class="p">,</span> <span class="mi">222</span><span class="p">,</span> <span class="mi">333</span><span class="p">,</span> <span class="mi">444</span><span class="p">,</span> <span class="mi">555</span><span class="p">]</span>
+<span class="n">avg_eval_sets</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">random_seed</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">random_seeds</span><span class="p">):</span>
+
+    <span class="n">action_dependent_models</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">action_dependent_outputs</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># get sets</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_seed</span><span class="p">)</span>
+    <span class="n">train</span> <span class="o">=</span> <span class="n">dg</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">num_samples</span><span class="p">)</span>
+    <span class="n">valid</span> <span class="o">=</span> <span class="n">dg</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">num_samples</span><span class="p">)</span>
+
+    <span class="c1"># for each treatment</span>
+    <span class="k">for</span> <span class="n">treat</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_treatments</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="c1"># get the subset of observations related to the treatment</span>
+        <span class="n">subset_idx</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="s1">&#39;treatments&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">treat</span>
+
+        <span class="c1"># train the treatment-dependent response model</span>
+        <span class="n">action_dependent_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">GradientBoostingRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+            <span class="n">X</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">subset_idx</span><span class="p">],</span>
+            <span class="n">y</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="n">subset_idx</span><span class="p">]))</span>
+        <span class="c1"># apply to the validation set</span>
+        <span class="n">action_dependent_outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">action_dependent_models</span><span class="p">[</span><span class="n">treat</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">valid</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">]))</span>
+
+    <span class="c1"># stack outputs</span>
+    <span class="n">valid</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;seed_</span><span class="si">{</span><span class="n">random_seed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">action_dependent_outputs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># create `Scorer` object</span>
+    <span class="n">scorer</span> <span class="o">=</span> <span class="n">scoring</span><span class="o">.</span><span class="n">Scorer</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;seed_</span><span class="si">{</span><span class="n">random_seed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                             <span class="s1">&#39;scoring_field&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;seed_</span><span class="si">{</span><span class="n">random_seed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                             <span class="s1">&#39;reference_field&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;seed_</span><span class="si">{</span><span class="n">random_seed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                             <span class="s1">&#39;reference_idx&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                             <span class="s1">&#39;scoring_func&#39;</span><span class="p">:</span> <span class="s1">&#39;cont_score_calc&#39;</span><span class="p">})</span>
+
+    <span class="n">ranking</span><span class="p">,</span> <span class="n">recommended_action</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span> <span class="n">action_dim</span> <span class="o">=</span> <span class="n">scorer</span><span class="o">.</span><span class="n">calculate_scores</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">valid</span><span class="p">)</span>
+    <span class="n">scored_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s1">&#39;recommended_action&#39;</span><span class="p">:</span> <span class="n">recommended_action</span><span class="p">,</span>
+            <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="n">score</span><span class="p">,</span>
+            <span class="s1">&#39;observed_action&#39;</span><span class="p">:</span> <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;treatments&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;response&#39;</span><span class="p">:</span> <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">avg_eval_sets</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;seed_</span><span class="si">{</span><span class="n">random_seed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">EvalSet</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">scored_df</span><span class="p">,</span>
+                                                         <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;seed_</span><span class="si">{</span><span class="n">random_seed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                                         <span class="n">observed_action_field</span><span class="o">=</span><span class="s1">&#39;observed_action&#39;</span><span class="p">,</span>
+                                                         <span class="n">response_field</span><span class="o">=</span><span class="s1">&#39;response&#39;</span><span class="p">,</span>
+                                                         <span class="n">score_field</span><span class="o">=</span><span class="s1">&#39;score&#39;</span><span class="p">,</span>
+                                                         <span class="n">proposed_action_field</span><span class="o">=</span><span class="s1">&#39;recommended_action&#39;</span><span class="p">,</span>
+                                                         <span class="n">control_indicator</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 5/5 [01:23&lt;00:00, 16.79s/it]
+</pre></div></div>
+</div>
+<p>Then for averaging, we simply need to send <code class="docutils literal notranslate"><span class="pre">average=True</span></code>, to the evaluator:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">e</span><span class="p">,</span><span class="n">s</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">eval_and_show</span><span class="p">(</span><span class="n">avg_eval_sets</span><span class="p">,</span><span class="n">average</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">specify</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fractional_lift&#39;</span><span class="p">,</span><span class="s1">&#39;avg_response&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial_133_0.png" src="../_images/tutorials_Tutorial_133_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Tutorial_133_1.png" src="../_images/tutorials_Tutorial_133_1.png" />
+</div>
+</div>
+<p>In that case, the wide gray line represents the average performance across the seeds.</p>
+</section>
+<section id="Evaluation-Summaries">
+<h2>Evaluation Summaries<a class="headerlink" href="#Evaluation-Summaries" title="Permalink to this headline"></a></h2>
+<p>When applying the evaluation procedure using an <code class="docutils literal notranslate"><span class="pre">Evaluator</span></code> object, we get in return a summary of the aggregate performance measured as part of the evaluation.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span><span class="p">,</span> <span class="n">single_summary</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">evaluate_set</span><span class="p">(</span><span class="n">eval_set</span><span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">multi_summary</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">evaluate_multiple</span><span class="p">(</span><span class="n">compare_eval_sets</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">single_summary</span></code> is a <code class="docutils literal notranslate"><span class="pre">dict</span></code>:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">single_summary</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+intersect_AUUC : 0.23
+intersect_max_avg_resp : 0.52
+max_relative_lift_intersect : 0.18
+intersect_max_gain : 9063.24
+treated_AUUC : 0.06
+treated_max_avg_resp : 0.38
+max_relative_lift_treated : 0.03
+treated_max_gain : 1739.44
+</pre></div></div>
+</div>
+<p>while the <code class="docutils literal notranslate"><span class="pre">multi_summary</span></code> is a pandas dataframe, allowing to observe the aggregate performance across multiple evaluation sets:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">multi_summary</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>intersect_AUUC</th>
+      <th>intersect_max_avg_resp</th>
+      <th>max_relative_lift_intersect</th>
+      <th>intersect_max_gain</th>
+      <th>treated_AUUC</th>
+      <th>treated_max_avg_resp</th>
+      <th>max_relative_lift_treated</th>
+      <th>treated_max_gain</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>t_gbdt</th>
+      <td>0.546067</td>
+      <td>5.068639</td>
+      <td>0.440621</td>
+      <td>21939.330516</td>
+      <td>0.107946</td>
+      <td>4.695551</td>
+      <td>0.067534</td>
+      <td>3355.064437</td>
+    </tr>
+    <tr>
+      <th>t_linear</th>
+      <td>0.610636</td>
+      <td>5.080676</td>
+      <td>0.452659</td>
+      <td>22538.792154</td>
+      <td>0.112413</td>
+      <td>4.691894</td>
+      <td>0.063876</td>
+      <td>3174.949781</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>The measures listed in these summaries are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">intersect_AUUC</span></code>: The area under the uplift curve (i.e. its integral), shown in the <a class="reference external" href="#Uplift-Curve">uplift chart</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">intersect_max_avg_resp</span></code>: The maximal expected response computed, corresponding to the <a class="reference external" href="#Expected-Response">expected response chart</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_relative_lift_intersect</span></code>: The maximal difference between the expected response curve, and the average response observed for the untreated group (across the entire dataset), which is labeled as <code class="docutils literal notranslate"><span class="pre">UntreatedAvgResponse</span></code> in the <a class="reference external" href="#Expected-Response">expected response chart</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">intersect_max_gain</span></code>: The maximal gain computed, corresponding to the <a class="reference external" href="#Gain-Curve">gain chart</a>.</p></li>
+</ul>
+<p>The other metrics will be included in the summary only for evaluation sets associated with multiple actions. Their names will include the replacement of <code class="docutils literal notranslate"><span class="pre">intersect</span></code> with <code class="docutils literal notranslate"><span class="pre">treated</span></code>, and they reveal the same logic explained above, applied in the case where the set of the multiple non-neutral actions are considered as a single treatment.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../tutorials.html" class="btn btn-neutral float-left" title="Tutorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../modules.html" class="btn btn-neutral float-right" title="uplift-analysis Modules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Dvir Ben Or.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
