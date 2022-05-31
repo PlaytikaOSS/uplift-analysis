@@ -1,6 +1,6 @@
-.. tft-torch documentation master file, created by
+.. uplift-analysis documentation master file, created by
 
-tft-torch Documentation
+uplift-analysis Documentation
 =====================================
 .. include:: introduction.rst
 

@@ -10,7 +10,7 @@ uplift-analysis
 [comment]: <> (Modify also LICENSE.rst if you change the license)
 ![alt text](https://img.shields.io/badge/build-passing-brightgreen)
 ![alt text](https://img.shields.io/badge/docs-passing-brightgreen)
-![alt text](https://img.shields.io/badge/version-0.0.1-blue)
+![alt text](https://img.shields.io/badge/version-0.0.2-blue)
 ![alt text](https://img.shields.io/badge/license-MIT-blue)
 
 **uplift-analysis** is a ``Python`` library that contains implementations of methods and utilities, which can serve use
@@ -34,7 +34,8 @@ The command above will automatically install all the required dependencies. Plea
 
 Getting started
 ---------------
-Check out the comprehensive [tutorial](https://playtikaresearch.github.io/uplift-analysis/build/html/tutorials.html) for a complete walk-through of the library.
+Check out the comprehensive [tutorial](https://playtikaresearch.github.io/uplift-analysis/build/html/tutorials.html) for
+a complete walk-through of the library.
 
 ```python
 import pandas as pd
@@ -51,14 +52,16 @@ evaluator = evaluation.Evaluator()
 eval_res, summary = evaluator.eval_and_show(eval_set, specify=['uplift'],
                                             show_random=True, num_random_rep=4)
 ```
+
 ![uplift](./_images/uplift_curve.png)
 
 
 Documentation
 -------------
-For more information, refer to the accompanying
-blogpost (soon to be published),
-[complete documentation](https://playtikaresearch.github.io/uplift-analysis), and [tutorial](https://playtikaresearch.github.io/uplift-analysis/build/html/tutorials.html).
+For more information, refer to the accompanying blogpost
+["Analyzing Uplift Models"](https://www.playtika-blog.com/playtika-ai/analyzing-uplift-models/), the package's
+[complete documentation](https://playtikaresearch.github.io/uplift-analysis),
+and the walkthrough [tutorials](https://playtikaresearch.github.io/uplift-analysis/build/html/tutorials.html).
 
 
 

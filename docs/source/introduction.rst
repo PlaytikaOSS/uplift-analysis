@@ -18,4 +18,7 @@ This library works for Python 3.7 and higher.
     ``uplift-analysis`` is a python library that can be directly used by data scientists when
     imported in  ``Jupyter Notebook`` or ``Python`` projects.
 
+For more information, refer to our
+`blogpost <https://www.playtika-blog.com/playtika-ai/analyzing-uplift-models/>`_.
+
 
