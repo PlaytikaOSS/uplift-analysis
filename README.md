@@ -10,7 +10,7 @@ uplift-analysis
 [comment]: <> (Modify also LICENSE.rst if you change the license)
 ![alt text](https://img.shields.io/badge/build-passing-brightgreen)
 ![alt text](https://img.shields.io/badge/docs-passing-brightgreen)
-![alt text](https://img.shields.io/badge/version-0.0.2-blue)
+![alt text](https://img.shields.io/badge/version-0.0.3-blue)
 ![alt text](https://img.shields.io/badge/license-MIT-blue)
 
 **uplift-analysis** is a ``Python`` library that contains implementations of methods and utilities, which can serve use
@@ -28,13 +28,13 @@ $ pip install uplift-analysis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The command above will automatically install all the required dependencies. Please visit the
-[installation](https://playtikaresearch.github.io/uplift-analysis/build/html/installation.html) page for more details.
+[installation](https://PlaytikaOSS.github.io/uplift-analysis/build/html/installation.html) page for more details.
 
 
 
 Getting started
 ---------------
-Check out the comprehensive [tutorial](https://playtikaresearch.github.io/uplift-analysis/build/html/tutorials.html) for
+Check out the comprehensive [tutorial](https://PlaytikaOSS.github.io/uplift-analysis/build/html/tutorials.html) for
 a complete walk-through of the library.
 
 ```python
@@ -60,8 +60,8 @@ Documentation
 -------------
 For more information, refer to the accompanying blogpost
 ["Analyzing Uplift Models"](https://www.playtika-blog.com/playtika-ai/analyzing-uplift-models/), the package's
-[complete documentation](https://playtikaresearch.github.io/uplift-analysis),
-and the walkthrough [tutorials](https://playtikaresearch.github.io/uplift-analysis/build/html/tutorials.html).
+[complete documentation](https://PlaytikaOSS.github.io/uplift-analysis),
+and the walkthrough [tutorials](https://PlaytikaOSS.github.io/uplift-analysis/build/html/tutorials.html).
 
 
 
@@ -69,10 +69,10 @@ and the walkthrough [tutorials](https://playtikaresearch.github.io/uplift-analys
 Info for developers
 -------------------
 
-The source code of the project is available on [GitHub](https://github.com/PlaytikaResearch/uplift-analysis).
+The source code of the project is available on [GitHub](https://github.com/PlaytikaOSS/uplift-analysis).
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-$ git clone https://github.com/PlaytikaResearch/uplift-analysis.git
+$ git clone https://github.com/PlaytikaOSS/uplift-analysis.git
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can install the library and the dependencies with one of the following commands:

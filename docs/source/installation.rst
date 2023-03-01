@@ -12,7 +12,7 @@ Latest release
 This library is distributed on PyPI_ and
 can be installed with ``pip``.
 
-The latest release is version ``0.0.2``.
+The latest release is version ``0.0.3``.
 
 .. code:: console
 
@@ -29,7 +29,7 @@ The source code of the project is available on GitHub_.
 
 .. code:: console
 
-   $ git clone https://github.com/PlaytikaResearch/uplift-analysis.git
+   $ git clone https://github.com/PlaytikaOSS/uplift-analysis.git
 
 You can install the library and the dependencies from the source code with one of the following commands:
 
@@ -40,7 +40,7 @@ You can install the library and the dependencies from the source code with one o
    $ pip install -r requirements.txt      # install dependencies
    $ pip install -r requirements-dev.txt  # install dependencies + developer-dependencies
 
-.. _GitHub: https://github.com/PlaytikaResearch/uplift-analysis
+.. _GitHub: https://github.com/PlaytikaOSS/uplift-analysis
 
 For creating the "*pip-installable*" ``*.whl`` file, run the following command (at the root of the
 repository):
